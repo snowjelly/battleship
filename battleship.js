@@ -1,5 +1,12 @@
 const Ship = (length) => {
-  return { length, sunk: false, hit: 0 };
+  let numTimesHit = 0;
+  let sunk = false;
+
+  function hit() {
+    numTimesHit += 1;
+  }
+
+  return { length, sunk, numTimesHit, hit };
 };
 
 export { Ship };
