@@ -6,3 +6,9 @@ test("2 length ship with full hp", () =>
     sunk: false,
     numTimesHit: 0,
   }));
+
+test("hitting a ship", () => {
+  const ship = Ship(2);
+  ship.hit();
+  expect(ship).toMatchObject({ numTimesHit: 1 });
+});
