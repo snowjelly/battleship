@@ -83,6 +83,4 @@ const Gameboard = () => {
   return { placeShip, receiveAttack, missedAttacks, shipsSunk };
 };
 
-Gameboard();
-
 export { Ship, Gameboard };

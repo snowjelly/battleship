@@ -115,3 +115,16 @@ test("hit 3 length ship twice", () => {
     },
   ]);
 });
+
+test("create invalid ship", () => {
+  const board = Gameboard();
+  const ship = Ship(3);
+
+  expect(
+    board.placeShip(ship, [
+      [0, 0],
+      [0, 3],
+      [0, 2],
+    ])
+  ).toThrow();
+});
