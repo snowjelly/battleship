@@ -17,3 +17,11 @@ test("sinking a small ship", () => {
   smallShip.hit();
   expect(smallShip.isSunk()).toBe(true);
 });
+
+test("place a small ship at [0,0]", () => {
+  const smallShip = Ship(2);
+  expect(Gameboard().placeShip(smallShip, [0, 0])).toEqual({
+    pos: [0, 0],
+    ship: smallShip,
+  });
+});
