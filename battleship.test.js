@@ -38,10 +38,17 @@ test("attacked ship at [9,0]", () => {
   expect(board.receiveAttack([9, 0])).toMatchObject({ numTimesHit: 1 });
 });
 
-test("found all missed attacks", () => {
+test("found all missed attacks i.e [0,0] [2,3] [3,5]", () => {
   const board = Gameboard();
   const ship = Ship(6);
   board.placeShip(ship, [9, 0]);
   board.receiveAttack([0, 0]);
-  expect(board.missedAttacks()).toContainEqual({ pos: [0, 0] });
+  board.receiveAttack([2, 3]);
+  board.receiveAttack([3, 5]);
+
+  expect(board.missedAttacks()).toMatchObject([
+    { pos: [0, 0] },
+    { pos: [2, 3] },
+    { pos: [3, 5] },
+  ]);
 });

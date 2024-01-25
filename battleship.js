@@ -53,7 +53,17 @@ const Gameboard = () => {
     return false;
   }
 
-  return { placeShip, receiveAttack };
+  function missedAttacks() {
+    const arr = [];
+    for (let i = 0; i < board.length; i += 1) {
+      if (board[i].miss) {
+        arr.push(board[i]);
+      }
+    }
+    return arr;
+  }
+
+  return { placeShip, receiveAttack, missedAttacks };
 };
 
 Gameboard();
