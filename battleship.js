@@ -46,6 +46,7 @@ const Gameboard = () => {
     const boardPos = getBoardCoords(coords);
     if (boardPos.ship) {
       boardPos.ship.hit();
+      console.log(boardPos.ship);
       return boardPos.ship;
     }
     boardPos.miss = true;

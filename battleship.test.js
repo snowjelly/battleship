@@ -30,3 +30,10 @@ test("missed attack at [3,3]", () => {
   const board = Gameboard();
   expect(board.receiveAttack([3, 3])).toBe(false);
 });
+
+test("attacked ship at [9,0]", () => {
+  const board = Gameboard();
+  const ship = Ship(6);
+  board.placeShip(ship, [9, 0]);
+  expect(board.receiveAttack([9, 0])).toEqual({ numTimesHit: 1 });
+});
