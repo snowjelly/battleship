@@ -17,8 +17,8 @@ const Ship = (length) => {
 const Gameboard = () => {
   function generate() {
     const game = [];
-    for (let i = 0; i < 9; i += 1) {
-      for (let k = 0; k < 9; k += 1) {
+    for (let i = 0; i < 10; i += 1) {
+      for (let k = 0; k < 10; k += 1) {
         game.push([i, k]);
       }
     }
