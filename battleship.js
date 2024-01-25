@@ -37,6 +37,17 @@ const Gameboard = () => {
   }
 
   function placeShip(ship, coords) {
+    coords.reduce((prev, curr) => {
+      console.log({ prev, curr });
+      if (
+        prev[0] - curr[0] > 1 ||
+        prev[1] - curr[1] > 1 ||
+        curr[1] - prev[1] > 1 ||
+        curr[0] - prev[0] > 1
+      )
+        throw new Error("Invalid placement");
+      else return curr;
+    });
     coords.forEach((coord) => {
       const boardCoords = getBoardCoords(coord);
       boardCoords.ship = ship;

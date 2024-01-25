@@ -120,11 +120,11 @@ test("create invalid ship", () => {
   const board = Gameboard();
   const ship = Ship(3);
 
-  expect(
+  expect(() =>
     board.placeShip(ship, [
       [0, 0],
       [0, 3],
       [0, 2],
     ])
-  ).toThrow();
+  ).toThrow("Invalid placement");
 });
