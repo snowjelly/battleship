@@ -36,10 +36,12 @@ const Gameboard = () => {
     return null;
   }
 
-  function placeShip(ship, pos) {
-    const shipPlaced = getBoardCoords(pos);
-    shipPlaced.ship = ship;
-    return shipPlaced;
+  function placeShip(ship, coords) {
+    coords.forEach((coord) => {
+      const boardCoords = getBoardCoords(coord);
+      boardCoords.ship = ship;
+    });
+    return { coords, ship };
   }
 
   function receiveAttack(coords) {

@@ -20,8 +20,16 @@ test("sinking a small ship", () => {
 
 test("place a small ship at [0,0]", () => {
   const smallShip = Ship(2);
-  expect(Gameboard().placeShip(smallShip, [0, 0])).toEqual({
-    pos: [0, 0],
+  expect(
+    Gameboard().placeShip(smallShip, [
+      [0, 0],
+      [0, 1],
+    ])
+  ).toEqual({
+    coords: [
+      [0, 0],
+      [0, 1],
+    ],
     ship: smallShip,
   });
 });
@@ -34,14 +42,19 @@ test("missed attack at [3,3]", () => {
 test("attacked ship at [9,0]", () => {
   const board = Gameboard();
   const ship = Ship(6);
-  board.placeShip(ship, [9, 0]);
+  board.placeShip(ship, [
+    [9, 0],
+    [9, 1],
+    [9, 2],
+    [9, 3],
+    [9, 4],
+    [9, 5],
+  ]);
   expect(board.receiveAttack([9, 0])).toMatchObject({ numTimesHit: 1 });
 });
 
 test("found all missed attacks i.e [0,0] [2,3] [3,5]", () => {
   const board = Gameboard();
-  const ship = Ship(6);
-  board.placeShip(ship, [9, 0]);
   board.receiveAttack([0, 0]);
   board.receiveAttack([2, 3]);
   board.receiveAttack([3, 5]);
@@ -56,7 +69,7 @@ test("found all missed attacks i.e [0,0] [2,3] [3,5]", () => {
 test("all ships are sunk", () => {
   const board = Gameboard();
   const ship = Ship(1);
-  board.placeShip(ship, [9, 0]);
+  board.placeShip(ship, [[9, 0]]);
   board.receiveAttack([9, 0]);
   expect(board.shipsSunk()).toBe(true);
 });
@@ -70,7 +83,7 @@ test("placeship", () => {
       [0, 1],
       [0, 2],
     ])
-  ).toContain({
+  ).toEqual({
     coords: [
       [0, 0],
       [0, 1],
