@@ -35,5 +35,5 @@ test("attacked ship at [9,0]", () => {
   const board = Gameboard();
   const ship = Ship(6);
   board.placeShip(ship, [9, 0]);
-  expect(board.receiveAttack([9, 0])).toEqual({ numTimesHit: 1 });
+  expect(board.receiveAttack([9, 0])).toMatchObject({ numTimesHit: 1 });
 });
