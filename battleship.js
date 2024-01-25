@@ -42,7 +42,17 @@ const Gameboard = () => {
     return shipPlaced;
   }
 
-  return { placeShip };
+  function receiveAttack(coords) {
+    const boardPos = getBoardCoords(coords);
+    if (boardPos.ship) {
+      boardPos.ship.hit();
+      return boardPos;
+    }
+    boardPos.miss = true;
+    return boardPos;
+  }
+
+  return { placeShip, receiveAttack };
 };
 
 Gameboard();
