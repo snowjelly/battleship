@@ -63,7 +63,23 @@ const Gameboard = () => {
     return arr;
   }
 
-  return { placeShip, receiveAttack, missedAttacks };
+  function shipsSunk() {
+    const arrSunk = [];
+    const arrAlive = [];
+    for (let i = 0; i < board.length; i += 1) {
+      if (board[i].ship) {
+        if (board[i].ship.isSunk()) {
+          arrSunk.push(board[i]);
+        } else if (!board[i].ship.isSunk()) {
+          arrAlive.push(board[i]);
+        }
+      }
+    }
+    if (arrAlive.length === 0) return true;
+    return false;
+  }
+
+  return { placeShip, receiveAttack, missedAttacks, shipsSunk };
 };
 
 Gameboard();

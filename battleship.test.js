@@ -52,3 +52,11 @@ test("found all missed attacks i.e [0,0] [2,3] [3,5]", () => {
     { pos: [3, 5] },
   ]);
 });
+
+test("all ships are sunk", () => {
+  const board = Gameboard();
+  const ship = Ship(1);
+  board.placeShip(ship, [9, 0]);
+  board.receiveAttack([9, 0]);
+  expect(board.shipsSunk()).toBe(true);
+});
