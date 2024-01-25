@@ -1,13 +1,13 @@
 const Ship = (length) => {
-  let numTimesHit = 0;
+  const numTimesHit = 0;
 
   function hit() {
-    numTimesHit += 1;
-    return numTimesHit;
+    this.numTimesHit += 1;
+    return this.numTimesHit;
   }
 
   function isSunk() {
-    if (numTimesHit === length) return true;
+    if (this.numTimesHit === length) return true;
     return false;
   }
 
