@@ -25,3 +25,10 @@ test("place a small ship at [0,0]", () => {
     ship: smallShip,
   });
 });
+
+test("receive attack on ship at [3,3]", () => {
+  const board = Gameboard();
+  expect(board.receiveAttack([3, 3]).ship).toEqual({
+    numTimesHit: 1,
+  });
+});
