@@ -71,7 +71,7 @@ test("all ships are sunk", () => {
   const ship = Ship(1);
   board.placeShip(ship, [[9, 0]]);
   board.receiveAttack([9, 0]);
-  expect(board.shipsSunk()).toBe(true);
+  expect(board.shipsSunk().sunk).toBe(true);
 });
 
 test("placeship", () => {
@@ -91,4 +91,27 @@ test("placeship", () => {
     ],
     ship,
   });
+});
+
+test("hit 3 length ship twice", () => {
+  const board = Gameboard();
+  const ship = Ship(3);
+  board.placeShip(ship, [
+    [0, 0],
+    [0, 1],
+    [0, 2],
+  ]);
+  board.receiveAttack([0, 1]);
+  board.receiveAttack([0, 0]);
+  expect(board.shipsSunk().arrAlive).toMatchObject([
+    {
+      ship: { numTimesHit: 2 },
+    },
+    {
+      ship: { numTimesHit: 2 },
+    },
+    {
+      ship: { numTimesHit: 2 },
+    },
+  ]);
 });

@@ -48,7 +48,6 @@ const Gameboard = () => {
     const boardPos = getBoardCoords(coords);
     if (boardPos.ship) {
       boardPos.ship.hit();
-      console.log(boardPos.ship);
       return boardPos.ship;
     }
     boardPos.miss = true;
@@ -77,8 +76,8 @@ const Gameboard = () => {
         }
       }
     }
-    if (arrAlive.length === 0) return true;
-    return false;
+    if (arrAlive.length === 0) return { sunk: true, arrSunk };
+    return { sunk: false, arrAlive };
   }
 
   return { placeShip, receiveAttack, missedAttacks, shipsSunk };
