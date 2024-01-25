@@ -27,14 +27,19 @@ const Gameboard = () => {
 
   const board = generate();
 
-  function placeShip(ship, pos) {
+  function getBoardCoords(pos) {
     for (let i = 0; i < board.length; i += 1) {
       if (board[i].pos[0] === pos[0] && board[i].pos[1] === pos[1]) {
-        board[i].ship = ship;
         return board[i];
       }
     }
-    throw new Error("Out of bounds");
+    return null;
+  }
+
+  function placeShip(ship, pos) {
+    const shipPlaced = getBoardCoords(pos);
+    shipPlaced.ship = ship;
+    return shipPlaced;
   }
 
   return { placeShip };
