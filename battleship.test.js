@@ -60,3 +60,22 @@ test("all ships are sunk", () => {
   board.receiveAttack([9, 0]);
   expect(board.shipsSunk()).toBe(true);
 });
+
+test("placeship", () => {
+  const board = Gameboard();
+  const ship = Ship(3);
+  expect(
+    board.placeShip(ship, [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+    ])
+  ).toContain({
+    coords: [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+    ],
+    ship,
+  });
+});
