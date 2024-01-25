@@ -8,5 +8,13 @@ test("create a 2 length ship with full hp", () =>
   }));
 
 test("hitting a ship", () => {
-  expect(Ship(2).hit()).toMatchObject({ numTimesHit: 1 });
+  const smallShip = Ship(2);
+  expect(smallShip.hit()).toBe(1);
+});
+
+test("sinking a small ship", () => {
+  const smallShip = Ship(2);
+  smallShip.hit();
+  smallShip.hit();
+  expect(smallShip.sunk).toBe(true);
 });

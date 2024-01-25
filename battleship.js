@@ -4,7 +4,7 @@ const Ship = (length) => {
 
   function hit() {
     numTimesHit += 1;
-    return { length, sunk, numTimesHit };
+    return numTimesHit;
   }
 
   return { length, sunk, numTimesHit, hit };
