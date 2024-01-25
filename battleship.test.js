@@ -26,9 +26,7 @@ test("place a small ship at [0,0]", () => {
   });
 });
 
-test("receive attack on ship at [3,3]", () => {
+test("missed attack at [3,3]", () => {
   const board = Gameboard();
-  expect(board.receiveAttack([3, 3]).ship).toEqual({
-    numTimesHit: 1,
-  });
+  expect(board.receiveAttack([3, 3])).toBe(false);
 });

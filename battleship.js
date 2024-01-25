@@ -46,10 +46,10 @@ const Gameboard = () => {
     const boardPos = getBoardCoords(coords);
     if (boardPos.ship) {
       boardPos.ship.hit();
-      return boardPos;
+      return boardPos.ship;
     }
     boardPos.miss = true;
-    return boardPos;
+    return false;
   }
 
   return { placeShip, receiveAttack };
