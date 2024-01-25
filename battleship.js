@@ -94,4 +94,18 @@ const Gameboard = () => {
   return { placeShip, receiveAttack, missedAttacks, shipsSunk };
 };
 
-export { Ship, Gameboard };
+const Player = (name) => {
+  const board = Gameboard();
+
+  function attack(player, coords) {
+    const result = player.board.receiveAttack(coords);
+    if (result === false) {
+      return `${name} has missed!`;
+    }
+    return `${name} has hit ${player.name}'s ship on ${coords}!`;
+  }
+
+  return { name, board, attack };
+};
+
+export { Ship, Gameboard, Player };

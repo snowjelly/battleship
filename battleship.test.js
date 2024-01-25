@@ -1,4 +1,4 @@
-import { Gameboard, Ship } from "./battleship";
+import { Gameboard, Ship, Player } from "./battleship";
 
 test("create a 2 length ship with full hp", () =>
   expect(Ship(2)).toMatchObject({
@@ -122,9 +122,15 @@ test("create invalid ship", () => {
 
   expect(() =>
     board.placeShip(ship, [
-      [0, 0],
       [0, 3],
+      [0, 0],
       [0, 2],
     ])
   ).toThrow("Invalid placement");
+});
+
+test("player attacks enemy gameboard", () => {
+  const player = Player("The entire Tekken 8 cast");
+  const enemy = Player("Sol Badguy");
+  expect(player.attack(enemy, [0, 0])).toBe(`${player.name} has missed!`);
 });
