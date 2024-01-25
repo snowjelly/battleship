@@ -24,7 +24,8 @@ const Gameboard = () => {
     }
     return game;
   }
-  return { generate };
+
+  const board = generate();
 };
 
 export { Ship, Gameboard };
