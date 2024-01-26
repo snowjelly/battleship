@@ -92,7 +92,16 @@ const Gameboard = () => {
     return { sunk: false, arrAlive };
   }
 
-  return { placeShip, receiveAttack, missedAttacks, shipsSunk };
+  function generateShips() {
+    return {
+      singleShip: [Ship(1), Ship(1), Ship(1), Ship(1)],
+      doubleShip: [Ship(2), Ship(2), Ship(2)],
+      tripleShip: [Ship(3), Ship(3)],
+      quadrupleShip: [Ship(4)],
+    };
+  }
+
+  return { placeShip, receiveAttack, missedAttacks, shipsSunk, generateShips };
 };
 
 const Player = (name) => {
