@@ -134,3 +134,13 @@ test("player attacks enemy gameboard", () => {
   const enemy = Player("Sol Badguy");
   expect(player.attack(enemy, [0, 0])).toBe(`${player.name} has missed!`);
 });
+
+test("board generates list of usuable ships", () => {
+  const board = Gameboard();
+  expect(board.generateShips()).toEqual({
+    singleShip: [Ship(1), Ship(1), Ship(1), Ship(1)],
+    doubleShip: [Ship(2), Ship(2), Ship(2)],
+    tripleShip: [Ship(3), Ship(3)],
+    quadrupleShip: [Ship(4)],
+  });
+});
