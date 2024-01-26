@@ -145,12 +145,15 @@ const Gameboard = () => {
   }
 
   function placeShipsRandomly() {
-    const ships = generateShips();
-    for (const property in object) {
-      for (let i = 0; i < object[property].length; i += 1) {
-        object[property][i];
+    const ships = Object.values(generateShips());
+    const shipCoords = [];
+    for (let i = 0; i < ships.length; i += 1) {
+      console.log(ships[i]);
+      for (let k = 0; k < ships[i].length; k += 1) {
+        shipCoords.push(generateRandomShipPlacementCoords(ships[i][k]));
       }
     }
+    console.log(shipCoords);
   }
 
   return {
@@ -160,10 +163,11 @@ const Gameboard = () => {
     shipsSunk,
     generateShips,
     generateRandomShipPlacementCoords,
+    placeShipsRandomly,
   };
 };
 
-console.log(Gameboard().generateRandomShipPlacementCoords(Ship(4)));
+console.log(Gameboard().placeShipsRandomly());
 
 const Player = (name) => {
   const board = Gameboard();
