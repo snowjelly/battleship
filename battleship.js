@@ -101,6 +101,15 @@ const Gameboard = () => {
     };
   }
 
+  function placeShipsRandomly() {
+    const ships = generateShips();
+    for (const property in object) {
+      for (let i = 0; i < object[property].length; i += 1) {
+        object[property][i];
+      }
+    }
+  }
+
   return { placeShip, receiveAttack, missedAttacks, shipsSunk, generateShips };
 };
 
