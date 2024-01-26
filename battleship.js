@@ -101,6 +101,49 @@ const Gameboard = () => {
     };
   }
 
+  function generateRandomShipPlacementCoords(ship) {
+    const randomAxis = Math.floor(Math.random() * 2);
+    const horizontalPlacementCoords = [];
+    const verticalPlacementCoords = [];
+
+    function getRandomStartingValue() {
+      const randomIndex = Math.floor(Math.random() * board.length);
+      const startingValue = board[randomIndex];
+      return startingValue;
+    }
+
+    let startingValue = getRandomStartingValue();
+
+    while (
+      !(startingValue.pos[0] + ship.length <= 9) &&
+      !(startingValue.pos[1] + ship.length <= 9)
+    ) {
+      startingValue = getRandomStartingValue();
+    }
+
+    if (startingValue.pos[0] + ship.length <= 9) {
+      for (let i = 0; i < ship.length; i += 1) {
+        horizontalPlacementCoords.push([
+          startingValue.pos[0] + i,
+          startingValue.pos[1],
+        ]);
+      }
+    }
+    if (startingValue.pos[1] + ship.length <= 9) {
+      for (let i = 0; i < ship.length; i += 1) {
+        verticalPlacementCoords.push([
+          startingValue.pos[0],
+          startingValue.pos[1] + i,
+        ]);
+      }
+    }
+
+    const coords = [horizontalPlacementCoords, verticalPlacementCoords];
+    if (coords[0].length === 0) return coords[1];
+    if (coords[1].length === 0) return coords[0];
+    return coords[randomAxis];
+  }
+
   function placeShipsRandomly() {
     const ships = generateShips();
     for (const property in object) {
@@ -110,8 +153,17 @@ const Gameboard = () => {
     }
   }
 
-  return { placeShip, receiveAttack, missedAttacks, shipsSunk, generateShips };
+  return {
+    placeShip,
+    receiveAttack,
+    missedAttacks,
+    shipsSunk,
+    generateShips,
+    generateRandomShipPlacementCoords,
+  };
 };
+
+console.log(Gameboard().generateRandomShipPlacementCoords(Ship(4)));
 
 const Player = (name) => {
   const board = Gameboard();
