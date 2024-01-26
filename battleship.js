@@ -38,7 +38,6 @@ const Gameboard = () => {
 
   function placeShip(ship, coords) {
     coords.reduce((prev, curr) => {
-      console.log({ prev, curr });
       if (
         prev[0] - curr[0] > 1 ||
         prev[1] - curr[1] > 1 ||
@@ -57,8 +56,10 @@ const Gameboard = () => {
 
   function receiveAttack(coords) {
     const boardPos = getBoardCoords(coords);
+    if (boardPos.hit) return "Cannot shoot the same coordinate twice";
     if (boardPos.ship) {
       boardPos.ship.hit();
+      boardPos.hit = true;
       return boardPos.ship;
     }
     boardPos.miss = true;
