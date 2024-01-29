@@ -101,7 +101,7 @@ const Gameboard = () => {
     };
   }
 
-  function generateRandomShipPlacementCoords(ship) {
+  function generateRandomShipPlacementCoords(cb, ship, set) {
     const randomAxis = Math.floor(Math.random() * 2);
     const horizontalPlacementCoords = [];
     const verticalPlacementCoords = [];
@@ -115,8 +115,9 @@ const Gameboard = () => {
     let startingValue = getRandomStartingValue();
 
     while (
-      !(startingValue.pos[0] + ship.length <= 9) &&
-      !(startingValue.pos[1] + ship.length <= 9)
+      (!(startingValue.pos[0] + ship.length <= 9) &&
+        !(startingValue.pos[1] + ship.length <= 9)) ||
+      set.has(JSON.stringify(startingValue))
     ) {
       startingValue = getRandomStartingValue();
     }
@@ -141,19 +142,68 @@ const Gameboard = () => {
     const coords = [horizontalPlacementCoords, verticalPlacementCoords];
     if (coords[0].length === 0) return coords[1];
     if (coords[1].length === 0) return coords[0];
+
+    coords[randomAxis].forEach((coord) => {
+      cb(coord);
+    });
+
     return coords[randomAxis];
   }
 
   function placeShipsRandomly() {
-    const ships = Object.values(generateShips());
-    const shipCoords = [];
-    for (let i = 0; i < ships.length; i += 1) {
-      console.log(ships[i]);
-      for (let k = 0; k < ships[i].length; k += 1) {
-        shipCoords.push(generateRandomShipPlacementCoords(ships[i][k]));
+    function slicer(arr) {
+      const newArr = [];
+      let start = 0;
+      let end = 2;
+      const newArrLength = 3;
+      for (let i = 0; i < newArrLength; i += 1) {
+        newArr.push(arr.slice(start, end));
+        start += 2;
+        end += 2;
       }
+      return newArr;
     }
-    console.log(shipCoords);
+
+    const shipCoords = new Set();
+    let numberOfCoordinatePairs = 0;
+
+    function randomlyPlaceShips(shipLength, n) {
+      const arr = [];
+      numberOfCoordinatePairs += n * shipLength;
+      while (shipCoords.size < numberOfCoordinatePairs) {
+        generateRandomShipPlacementCoords(
+          (coords) => {
+            const coordsStr = JSON.stringify(coords);
+            if (!shipCoords.has(coordsStr)) {
+              shipCoords.add(JSON.stringify(coords));
+              arr.push(coords);
+            }
+          },
+          Ship(shipLength),
+          shipCoords
+        );
+      }
+      return arr;
+    }
+
+    const singles = randomlyPlaceShips(1, 4);
+    const doubles = randomlyPlaceShips(2, 3);
+    const triples = randomlyPlaceShips(3, 2);
+    const quads = randomlyPlaceShips(4, 1);
+
+    if (quads.length < 4) {
+      shipCoords.difference((cb) => {
+        for (let i = 0; i < quads.length; i += 1) {
+          cb(JSON.stringify(quads[i]));
+        }
+      });
+    }
+
+    const returnValue = { singles, doubles, triples, quads };
+    console.log({ shipCoords, ...returnValue });
+    return returnValue;
+
+    // console.log(slicer(placeDoubles.arr));
   }
 
   return {
@@ -167,7 +217,7 @@ const Gameboard = () => {
   };
 };
 
-console.log(Gameboard().placeShipsRandomly());
+Gameboard().placeShipsRandomly();
 
 const Player = (name) => {
   const board = Gameboard();

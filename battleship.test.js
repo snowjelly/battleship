@@ -147,7 +147,7 @@ test("board generates list of usuable ships", () => {
   );
 });
 
-test.skip("place a ship in a random coordinate", () => {
+test("place a ship in a random coordinate", () => {
   const board = Gameboard();
   board.placeShipsRandomly();
   expect(board.shipsSunk().sunk).toBe(false);
