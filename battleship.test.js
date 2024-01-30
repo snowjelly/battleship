@@ -131,18 +131,6 @@ test("player attacks enemy gameboard", () => {
   expect(player.attack(enemy, [0, 0])).toBe(`${player.name} has missed!`);
 });
 
-test("board generates list of usuable ships", () => {
-  const board = Gameboard();
-  expect(JSON.stringify(board.generateShips())).toEqual(
-    JSON.stringify({
-      singleShip: [Ship(1), Ship(1), Ship(1), Ship(1)],
-      doubleShip: [Ship(2), Ship(2), Ship(2)],
-      tripleShip: [Ship(3), Ship(3)],
-      quadrupleShip: [Ship(4)],
-    })
-  );
-});
-
 test("place a ship in a random coordinate", () => {
   const board = Gameboard();
   board.placeShipsRandomly();

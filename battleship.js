@@ -260,13 +260,9 @@ const Gameboard = () => {
     receiveAttack,
     missedAttacks,
     shipsSunk,
-    generateShips,
-    generateRandomShipPlacementCoords,
     placeShipsRandomly,
   };
 };
-
-Gameboard().placeShipsRandomly();
 
 const Player = (name) => {
   const board = Gameboard();
