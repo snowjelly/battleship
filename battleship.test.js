@@ -136,10 +136,3 @@ test("place a ship in a random coordinate", () => {
   board.placeShipsRandomly();
   expect(board.shipsSunk().sunk).toBe(false);
 });
-
-test.skip("generate a random coordinate", () => {
-  const board = Gameboard();
-  expect(board.generateRandomCoordinate()).toEqual(
-    board.isValidCoordinate(true)
-  );
-});
