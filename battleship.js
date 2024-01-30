@@ -27,6 +27,12 @@ const Gameboard = () => {
 
   const board = generate();
 
+  function getRandomCoordinate() {
+    const randomIndex = Math.floor(Math.random() * board.length);
+    const startingValue = board[randomIndex];
+    return startingValue;
+  }
+
   function getBoardCoords(pos) {
     for (let i = 0; i < board.length; i += 1) {
       if (board[i].pos[0] === pos[0] && board[i].pos[1] === pos[1]) {
@@ -90,34 +96,19 @@ const Gameboard = () => {
     return { sunk: false, arrAlive };
   }
 
-  function generateShips() {
-    return {
-      singleShip: [Ship(1), Ship(1), Ship(1), Ship(1)],
-      doubleShip: [Ship(2), Ship(2), Ship(2)],
-      tripleShip: [Ship(3), Ship(3)],
-      quadrupleShip: [Ship(4)],
-    };
-  }
-
   function generateRandomShipPlacementCoords(cb, ship, set) {
     const randomAxis = Math.floor(Math.random() * 2);
     const horizontalPlacementCoords = [];
     const verticalPlacementCoords = [];
 
-    function getRandomStartingValue() {
-      const randomIndex = Math.floor(Math.random() * board.length);
-      const startingValue = board[randomIndex];
-      return startingValue;
-    }
-
-    let startingValue = getRandomStartingValue();
+    let startingValue = getRandomCoordinate();
 
     while (
       (!(startingValue.pos[0] + ship.length <= 9) &&
         !(startingValue.pos[1] + ship.length <= 9)) ||
       set.has(JSON.stringify(startingValue))
     ) {
-      startingValue = getRandomStartingValue();
+      startingValue = getRandomCoordinate();
     }
 
     if (startingValue.pos[0] + ship.length <= 9) {
@@ -258,6 +249,7 @@ const Gameboard = () => {
     missedAttacks,
     shipsSunk,
     placeShipsRandomly,
+    getRandomCoordinate,
   };
 };
 
