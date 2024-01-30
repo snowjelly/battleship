@@ -18,20 +18,16 @@ test("sinking a small ship", () => {
   expect(smallShip.isSunk()).toBe(true);
 });
 
-test("place a small ship at [0,0]", () => {
+test("place a ship of length 2 at [ [0,0],[0,1] ]", () => {
   const smallShip = Ship(2);
-  expect(
-    Gameboard().placeShip(smallShip, [
-      [0, 0],
-      [0, 1],
-    ])
-  ).toEqual({
-    coords: [
-      [0, 0],
-      [0, 1],
-    ],
-    ship: smallShip,
-  });
+  const board = Gameboard();
+  const coords = [];
+  coords.push(board.placeShip(smallShip, [0, 0]));
+  coords.push(board.placeShip(smallShip, [0, 1]));
+  expect(coords).toEqual([
+    { coords: [0, 0], ship: smallShip },
+    { coords: [0, 1], ship: smallShip },
+  ]);
 });
 
 test("missed attack at [3,3]", () => {

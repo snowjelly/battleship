@@ -226,7 +226,19 @@ const Gameboard = () => {
       quads,
     };
 
-    console.log(placeShip(Ship(1), singles[0]));
+    returnValue.singles.forEach((coord) => {
+      console.log(placeShip(Ship(1), coord));
+    });
+
+    returnValue.doubles.forEach((coord) => {
+      const ship = Ship(2);
+      coord.forEach((blah) => {
+        console.log(placeShip(ship, blah));
+      });
+      console.log({ thisCord: coord });
+    });
+
+    console.log(shipsSunk().arrAlive);
 
     console.log({ shipCoords, ...returnValue });
     return returnValue;
