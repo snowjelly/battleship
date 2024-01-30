@@ -1,4 +1,4 @@
-import { Gameboard, Ship, Player } from "./battleship";
+import { Gameboard, Ship, Player } from "../modules/battleship";
 
 test("create a 2 length ship with full hp", () =>
   expect(Ship(2)).toMatchObject({
