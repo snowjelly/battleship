@@ -227,20 +227,31 @@ const Gameboard = () => {
     };
 
     returnValue.singles.forEach((coord) => {
-      console.log(placeShip(Ship(1), coord));
+      placeShip(Ship(1), coord);
     });
 
-    returnValue.doubles.forEach((coord) => {
+    returnValue.doubles.forEach((doubleCoord) => {
       const ship = Ship(2);
-      coord.forEach((blah) => {
-        console.log(placeShip(ship, blah));
+      doubleCoord.forEach((singleCoord) => {
+        placeShip(ship, singleCoord);
       });
-      console.log({ thisCord: coord });
+    });
+
+    returnValue.triples.forEach((tripleCoord) => {
+      const ship = Ship(3);
+      tripleCoord.forEach((singleCoord) => {
+        placeShip(ship, singleCoord);
+      });
+    });
+
+    returnValue.quads.forEach((coord) => {
+      const ship = Ship(4);
+      placeShip(ship, coord);
     });
 
     console.log(shipsSunk().arrAlive);
 
-    console.log({ shipCoords, ...returnValue });
+    // console.log({ shipCoords, ...returnValue });
     return returnValue;
   }
 
