@@ -249,9 +249,6 @@ const Gameboard = () => {
       placeShip(ship, coord);
     });
 
-    console.log(shipsSunk().arrAlive);
-
-    // console.log({ shipCoords, ...returnValue });
     return returnValue;
   }
 
