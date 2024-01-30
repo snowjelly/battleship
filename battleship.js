@@ -47,10 +47,8 @@ const Gameboard = () => {
         throw new Error("Invalid placement");
       else return curr;
     });
-    coords.forEach((coord) => {
-      const boardCoords = getBoardCoords(coord);
-      boardCoords.ship = ship;
-    });
+    const boardCoords = getBoardCoords(coords);
+    boardCoords.ship = ship;
     return { coords, ship };
   }
 
@@ -165,15 +163,31 @@ const Gameboard = () => {
   }
 
   function placeShipsRandomly() {
-    function slicer(arr) {
+    function slicer(arr, type) {
       const newArr = [];
-      let start = 0;
-      let end = 2;
-      const newArrLength = 3;
+      let start;
+      let end;
+      let newArrLength;
+      let startIncrement;
+      let endIncrement;
+      if (type === 2 || type === "double") {
+        start = 0;
+        end = 2;
+        newArrLength = 3;
+        startIncrement = 2;
+        endIncrement = 2;
+      }
+      if (type === 3 || type === "triple") {
+        start = 0;
+        end = 3;
+        newArrLength = 2;
+        startIncrement = 3;
+        endIncrement = 3;
+      }
       for (let i = 0; i < newArrLength; i += 1) {
         newArr.push(arr.slice(start, end));
-        start += 2;
-        end += 2;
+        start += startIncrement;
+        end += endIncrement;
       }
       return newArr;
     }
@@ -205,11 +219,17 @@ const Gameboard = () => {
     const triples = randomlyPlaceShips(3, 2);
     const quads = randomlyPlaceShips(4, 1);
 
-    const returnValue = { singles, doubles, triples, quads };
+    const returnValue = {
+      singles,
+      doubles: slicer(doubles, 2),
+      triples: slicer(triples, 3),
+      quads,
+    };
+
+    console.log(placeShip(Ship(1), singles[0]));
+
     console.log({ shipCoords, ...returnValue });
     return returnValue;
-
-    // console.log(slicer(placeDoubles.arr));
   }
 
   return {
