@@ -124,6 +124,13 @@ const Gameboard = () => {
 
     if (startingValue.pos[0] + ship.length <= 9) {
       for (let i = 0; i < ship.length; i += 1) {
+        if (
+          set.has(
+            JSON.stringify([startingValue.pos[0] + i, startingValue.pos[1]])
+          )
+        ) {
+          return generateRandomShipPlacementCoords(cb, ship, set);
+        }
         horizontalPlacementCoords.push([
           startingValue.pos[0] + i,
           startingValue.pos[1],
@@ -132,6 +139,13 @@ const Gameboard = () => {
     }
     if (startingValue.pos[1] + ship.length <= 9) {
       for (let i = 0; i < ship.length; i += 1) {
+        if (
+          set.has(
+            JSON.stringify([startingValue.pos[0], startingValue.pos[1] + i])
+          )
+        ) {
+          return generateRandomShipPlacementCoords(cb, ship, set);
+        }
         verticalPlacementCoords.push([
           startingValue.pos[0],
           startingValue.pos[1] + i,
@@ -190,14 +204,6 @@ const Gameboard = () => {
     const doubles = randomlyPlaceShips(2, 3);
     const triples = randomlyPlaceShips(3, 2);
     const quads = randomlyPlaceShips(4, 1);
-
-    if (quads.length < 4) {
-      shipCoords.difference((cb) => {
-        for (let i = 0; i < quads.length; i += 1) {
-          cb(JSON.stringify(quads[i]));
-        }
-      });
-    }
 
     const returnValue = { singles, doubles, triples, quads };
     console.log({ shipCoords, ...returnValue });
