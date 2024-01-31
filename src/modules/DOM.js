@@ -10,6 +10,87 @@ function waitForAnimationEnd(animationClassName, querySelector, cb) {
   });
 }
 
+function renderGameBoards() {
+  document.querySelector("main").innerHTML = `
+      <div class="container fade-in"></div>`;
+  function renderPlayerNames() {
+    let cpuText = "";
+    if (localStorage.getItem("opponent") === "ai") cpuText = "(CPU)";
+    const html = `
+      <div class="player-names">
+        <div class="player1-name name silly-font">
+          ${localStorage.getItem("player1Name")}
+        </div>
+        <div class="player2-name name silly-font">
+          ${localStorage.getItem("player2Name")} ${cpuText}
+        </div>
+      </div>
+    `;
+    return html;
+  }
+
+  function renderBoards() {
+    const html = `
+      <div class="boards">
+        <div class="player1-board-container">
+          <table>
+            <thead>
+              <tr>
+                <th scope"col"></th>
+                <th scope"col">A</th>
+                <th scope"col">B</th>
+                <th scope"col">C</th>
+                <th scope"col">D</th>
+                <th scope"col">E</th>
+                <th scope"col">F</th>
+                <th scope"col">G</th>
+                <th scope"col">H</th>
+                <th scope"col">I</th>
+                <th scope"col">J</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="board-row">
+                <td class="cell"></td>
+              </tr>
+          </table>
+        </div>
+        <div class="player2-board-container">
+        </div>
+      </div>
+    `;
+    return html;
+  }
+
+  document.querySelector(".container").innerHTML =
+    renderPlayerNames() + renderBoards();
+}
+
+function removeNameSelectScreen() {
+  document.querySelector(".name-selection").remove();
+}
+
+function storageSetPlayerNames(player1Name, player2Name) {
+  localStorage.setItem("player1Name", player1Name);
+  localStorage.setItem("player2Name", player2Name);
+}
+
+function addNameSubmitBtnEventListeners() {
+  document.querySelector("button").addEventListener("click", (e) => {
+    let player1Name = e.target.form[0].value;
+    let player2Name = e.target.form[1].value;
+    if (player1Name === "") {
+      player1Name = "Player 1";
+    }
+    if (player2Name === "") {
+      player2Name = "Player 2";
+    }
+    storageSetPlayerNames(player1Name, player2Name);
+    waitForAnimationEnd("fade-out", ".name-selection", removeNameSelectScreen);
+    waitForAnimationEnd("fade-out", ".name-selection", renderGameBoards);
+  });
+}
+
 function renderNameSelection(ai) {
   let player1Name;
   let player2Name;
@@ -38,6 +119,7 @@ function renderNameSelection(ai) {
     </div>
   `;
   document.querySelector("main").innerHTML = html;
+  addNameSubmitBtnEventListeners();
 }
 
 function addOpponentSelectEventListeners() {
@@ -45,6 +127,7 @@ function addOpponentSelectEventListeners() {
   const humanBtn = document.querySelector("#human");
 
   aiBtn.addEventListener("click", (e) => {
+    localStorage.setItem("opponent", "ai");
     waitForAnimationEnd("fade-out", ".welcome", removeWelcomeScreen);
     waitForAnimationEnd("fade-out", ".welcome", () => {
       renderNameSelection(true);
@@ -52,6 +135,7 @@ function addOpponentSelectEventListeners() {
   });
 
   humanBtn.addEventListener("click", (e) => {
+    localStorage.setItem("opponent", "human");
     waitForAnimationEnd("fade-out", ".welcome", removeWelcomeScreen);
     waitForAnimationEnd("fade-out", ".welcome", renderNameSelection);
   });

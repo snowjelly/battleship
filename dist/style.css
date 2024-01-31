@@ -62,6 +62,19 @@ button.silly-font:hover {
   width: 50%;
 }
 
+.player-names {
+  display: flex;
+  justify-content: space-between;
+}
+
+.name {
+  padding: 2rem;
+}
+
+.container {
+  height: 100vh;
+}
+
 .fade-in {
   animation: fadeIn 1s;
 }
