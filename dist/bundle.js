@@ -15,7 +15,7 @@
   \****************************/
 /***/ (() => {
 
-eval("// after getting the users name we should\n// ask them if they want to fight an AI opponent\n// or real life opponent\n\nfunction addOpponentSelectEventListeners() {\n  const aiBtn = document.querySelector(\"#ai\");\n  const humanBtn = document.querySelector(\"#human\");\n\n  aiBtn.addEventListener(\"click\", (e) => {\n    console.log(e);\n  });\n\n  humanBtn.addEventListener(\"click\", (e) => {\n    console.log(e);\n  });\n}\n\naddOpponentSelectEventListeners();\n\n\n//# sourceURL=webpack://battleship/./src/modules/DOM.js?");
+eval("function removeWelcomeScreen() {\n  document.querySelector(\".welcome\").remove();\n}\n\nfunction fadeOutWelcome() {\n  const welcome = document.querySelector(\".welcome\");\n  welcome.classList.add(\"fade-out\");\n  welcome.addEventListener(\"animationend\", () => {\n    removeWelcomeScreen();\n  });\n}\n\nfunction addOpponentSelectEventListeners() {\n  const aiBtn = document.querySelector(\"#ai\");\n  const humanBtn = document.querySelector(\"#human\");\n\n  aiBtn.addEventListener(\"click\", (e) => {\n    fadeOutWelcome();\n  });\n\n  humanBtn.addEventListener(\"click\", (e) => {\n    fadeOutWelcome();\n  });\n}\n\naddOpponentSelectEventListeners();\n\n\n//# sourceURL=webpack://battleship/./src/modules/DOM.js?");
 
 /***/ }),
 
