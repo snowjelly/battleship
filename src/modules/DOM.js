@@ -22,7 +22,7 @@ function renderNameSelection(ai) {
   }
   const html = `
     <div class="name-selection fade-in">
-      <form>
+      <form class="form-name">
         <div class="form-name-el">
           <label for="player1"> ${player1Name} </label>
           <input type="text" name="player1" id="player1" required/>

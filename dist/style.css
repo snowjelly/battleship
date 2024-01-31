@@ -55,6 +55,11 @@ button.silly-font:hover {
 .submit-container {
   display: flex;
   justify-content: end;
+  padding: 1rem;
+}
+
+.form-name {
+  width: 50%;
 }
 
 .fade-in {
