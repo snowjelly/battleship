@@ -31,6 +31,9 @@ function renderNameSelection(ai) {
           <label for="player2"> ${player2Name} </label>
           <input type="text" name="player2" id="player2" required/>
         </div>
+        <div class="submit-container">
+          <button class="silly-font">Let's rock!</button>
+        </div>
       </form>
     </div>
   `;

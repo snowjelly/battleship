@@ -2,6 +2,11 @@ body {
   margin: 0;
 }
 
+@font-face {
+  font-family: "custom impact";
+  src: url("./assets/custom-impact.otf");
+}
+
 .welcome {
   display: flex;
   flex-direction: column;
@@ -35,6 +40,11 @@ h2.question {
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
+}
+
+.silly-font {
+  font-family: "custom impact", Impact, Haettenschweiler, "Arial Narrow Bold",
+    sans-serif;
 }
 
 .fade-in {
