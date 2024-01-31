@@ -7,6 +7,7 @@ module.exports = {
     "./src/modules/battleship.js",
     "./src/modules/gameloop.js",
   ],
+  devtool: "inline-source-map",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
