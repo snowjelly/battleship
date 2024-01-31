@@ -45,6 +45,16 @@ h2.question {
 .silly-font {
   font-family: "custom impact", Impact, Haettenschweiler, "Arial Narrow Bold",
     sans-serif;
+  font-size: 2rem;
+}
+
+button.silly-font:hover {
+  cursor: pointer;
+}
+
+.submit-container {
+  display: flex;
+  justify-content: end;
 }
 
 .fade-in {

@@ -32,7 +32,7 @@ function renderNameSelection(ai) {
           <input type="text" name="player2" id="player2" required/>
         </div>
         <div class="submit-container">
-          <button class="silly-font">Let's rock!</button>
+          <button class="silly-font" type="button">LET'S ROCK!</button>
         </div>
       </form>
     </div>
