@@ -1,3 +1,5 @@
+import Game from "./gameloop";
+
 function removeWelcomeScreen() {
   document.querySelector(".welcome").remove();
 }
@@ -191,6 +193,48 @@ function renderGameBoards() {
 
   document.querySelector(".container").innerHTML =
     renderPlayerNames() + renderBoards();
+
+  const p1Table = document.querySelector(".player1-board-container")
+    .children[0];
+
+  for (let i = 1; i < p1Table.rows.length; i += 1) {
+    // console.log(p1Table.rows[i]);
+
+    for (let k = 1; k < p1Table.rows[i].cells.length; k += 1) {
+      const cell = p1Table.rows[i].cells[k];
+      cell.setAttribute("data-y", i - 1);
+      cell.setAttribute("data-x", k - 1);
+    }
+  }
+
+  Game(
+    localStorage.getItem("player1Name"),
+    localStorage.getItem("player2Name")
+  );
+
+  const player1Board = JSON.parse(localStorage.getItem("player1Board"));
+  const player2Board = JSON.parse(localStorage.getItem("player2Board"));
+
+  player1Board.singles.forEach((single) => {
+    document.querySelector(
+      `[data-y="${single[0]}"][data-x="${single[1]}"]`
+    ).classList = "cell single";
+  });
+  player1Board.doubles.flat(1).forEach((coord) => {
+    document.querySelector(
+      `[data-y="${coord[0]}"][data-x="${coord[1]}"]`
+    ).classList = "cell double";
+  });
+  player1Board.triples.flat(1).forEach((coord) => {
+    document.querySelector(
+      `[data-y="${coord[0]}"][data-x="${coord[1]}"]`
+    ).classList = "cell triple";
+  });
+  player1Board.quads.forEach((coord) => {
+    document.querySelector(
+      `[data-y="${coord[0]}"][data-x="${coord[1]}"]`
+    ).classList = "cell quad";
+  });
 }
 
 function removeNameSelectScreen() {

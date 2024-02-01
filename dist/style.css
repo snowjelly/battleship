@@ -78,7 +78,27 @@ button.silly-font:hover {
 .cell {
   width: 2rem;
   height: 2rem;
-  background-color: red;
+  border: 1px #7e22ce solid;
+}
+
+.single {
+  background-color: #db2777;
+}
+
+.double {
+  background-color: #e11d48;
+}
+
+.triple {
+  background-color: #0284c7;
+}
+
+.quad {
+  background-color: #4338ca;
+}
+
+table {
+  border-collapse: collapse;
 }
 
 .fade-in {
