@@ -75,6 +75,12 @@ button.silly-font:hover {
   height: 100vh;
 }
 
+.cell {
+  width: 2rem;
+  height: 2rem;
+  background-color: red;
+}
+
 .fade-in {
   animation: fadeIn 1s;
 }
