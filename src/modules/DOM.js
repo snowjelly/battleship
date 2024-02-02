@@ -1,3 +1,4 @@
+import { renderBoard1, renderBoard2 } from "./gameBoards";
 import Game from "./gameloop";
 
 function removeWelcomeScreen() {
@@ -15,14 +16,21 @@ function waitForAnimationEnd(animationClassName, querySelector, cb) {
 function renderGameBoards() {
   document.querySelector("main").innerHTML = `
       <div class="container fade-in"></div>`;
-  function renderPlayerNames() {
-    let cpuText = "";
-    if (localStorage.getItem("opponent") === "ai") cpuText = "(CPU)";
+  let cpuText = "";
+  if (localStorage.getItem("opponent") === "ai") cpuText = "(CPU)";
+
+  function renderPlayer1Name() {
     const html = `
       <div class="player-names">
         <div class="player1-name name silly-font">
           ${localStorage.getItem("player1Name")}
         </div>
+        `;
+    return html;
+  }
+
+  function renderPlayer2Name() {
+    const html = `
         <div class="player2-name name silly-font">
           ${localStorage.getItem("player2Name")} ${cpuText}
         </div>
@@ -31,168 +39,12 @@ function renderGameBoards() {
     return html;
   }
 
-  function renderBoards() {
-    const html = `
-      <div class="boards">
-        <div class="player1-board-container">
-          <table>
-            <thead>
-              <tr>
-                <th scope"col"></th>
-                <th scope"col">A</th>
-                <th scope"col">B</th>
-                <th scope"col">C</th>
-                <th scope"col">D</th>
-                <th scope"col">E</th>
-                <th scope"col">F</th>
-                <th scope"col">G</th>
-                <th scope"col">H</th>
-                <th scope"col">I</th>
-                <th scope"col">J</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="board-row">
-                <td class="number-cell">1</td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-              </tr>
-              <tr class="board-row">
-                <td class="number-cell">2</td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-              </tr>
-              <tr class="board-row">
-                <td class="number-cell">3</td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-              </tr>
-              <tr class="board-row">
-                <td class="number-cell">4</td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-              </tr>
-              <tr class="board-row">
-                <td class="number-cell">5</td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-              </tr>
-              <tr class="board-row">
-                <td class="number-cell">6</td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-              </tr>
-              <tr class="board-row">
-                <td class="number-cell">7</td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-              </tr>
-              <tr class="board-row">
-                <td class="number-cell">8</td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-              </tr>
-              <tr class="board-row">
-                <td class="number-cell">9</td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-              </tr>
-              <tr class="board-row">
-                <td class="number-cell">10</td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-                <td class="cell"></td>
-              </tr>
-          </table>
-        </div>
-        <div class="player2-board-container">
-        </div>
-      </div>
-    `;
-    return html;
-  }
+  const container = document.querySelector(".container");
 
-  document.querySelector(".container").innerHTML =
-    renderPlayerNames() + renderBoards();
+  container.insertAdjacentHTML("beforeend", renderPlayer1Name());
+  container.insertAdjacentHTML("beforeend", renderBoard1());
+  container.insertAdjacentHTML("beforeend", renderPlayer2Name());
+  container.insertAdjacentHTML("beforeend", renderBoard2());
 
   const p1Table = document.querySelector(".player1-board-container")
     .children[0];
