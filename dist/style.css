@@ -64,21 +64,31 @@ button.silly-font:hover {
 
 .player-names {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .name {
-  padding: 2rem;
+  display: flex;
+  justify-content: center;
 }
 
 .container {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .cell {
-  width: 2rem;
-  height: 2rem;
+  width: 1.8rem;
+  height: 1.8rem;
   border: 1px #7e22ce solid;
+}
+
+.player1-board-container,
+.player2-board-container {
+  display: flex;
+  justify-content: center;
 }
 
 .singles {
@@ -99,6 +109,12 @@ button.silly-font:hover {
 
 table {
   border-collapse: collapse;
+}
+
+.boards {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
 .fade-in {
