@@ -215,26 +215,26 @@ function renderGameBoards() {
   const player1Board = JSON.parse(localStorage.getItem("player1Board"));
   const player2Board = JSON.parse(localStorage.getItem("player2Board"));
 
-  player1Board.singles.forEach((single) => {
-    document.querySelector(
-      `[data-y="${single[0]}"][data-x="${single[1]}"]`
-    ).classList = "cell single";
-  });
-  player1Board.doubles.flat(1).forEach((coord) => {
-    document.querySelector(
-      `[data-y="${coord[0]}"][data-x="${coord[1]}"]`
-    ).classList = "cell double";
-  });
-  player1Board.triples.flat(1).forEach((coord) => {
-    document.querySelector(
-      `[data-y="${coord[0]}"][data-x="${coord[1]}"]`
-    ).classList = "cell triple";
-  });
-  player1Board.quads.forEach((coord) => {
-    document.querySelector(
-      `[data-y="${coord[0]}"][data-x="${coord[1]}"]`
-    ).classList = "cell quad";
-  });
+  function renderShips(board, type) {
+    if (type === "singles" || type === "quads") {
+      board[type].forEach((coord) => {
+        document.querySelector(
+          `[data-y="${coord[0]}"][data-x="${coord[1]}"]`
+        ).classList = `cell ${type}`;
+      });
+    } else {
+      board[type].flat(1).forEach((coord) => {
+        document.querySelector(
+          `[data-y="${coord[0]}"][data-x="${coord[1]}"]`
+        ).classList = `cell ${type}`;
+      });
+    }
+  }
+
+  renderShips(player1Board, "singles");
+  renderShips(player1Board, "doubles");
+  renderShips(player1Board, "triples");
+  renderShips(player1Board, "quads");
 }
 
 function removeNameSelectScreen() {
