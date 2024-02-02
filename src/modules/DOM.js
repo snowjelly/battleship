@@ -48,16 +48,24 @@ function renderGameBoards() {
 
   const p1Table = document.querySelector(".player1-board-container")
     .children[0];
+  const p2Table = document.querySelector(".player2-board-container")
+    .children[0];
 
-  for (let i = 1; i < p1Table.rows.length; i += 1) {
-    // console.log(p1Table.rows[i]);
-
-    for (let k = 1; k < p1Table.rows[i].cells.length; k += 1) {
-      const cell = p1Table.rows[i].cells[k];
-      cell.setAttribute("data-y", i - 1);
-      cell.setAttribute("data-x", k - 1);
+  function tagCells(table) {
+    for (let i = 1; i < table.rows.length; i += 1) {
+      for (let k = 1; k < table.rows[i].cells.length; k += 1) {
+        const cell = table.rows[i].cells[k];
+        cell.setAttribute("data-y", i - 1);
+        cell.setAttribute("data-x", k - 1);
+        if (table.parentElement.classList.contains("player2-board-container")) {
+          cell.classList.add("p2");
+        }
+      }
     }
   }
+
+  tagCells(p1Table);
+  tagCells(p2Table);
 
   Game(
     localStorage.getItem("player1Name"),
@@ -67,17 +75,21 @@ function renderGameBoards() {
   const player1Board = JSON.parse(localStorage.getItem("player1Board"));
   const player2Board = JSON.parse(localStorage.getItem("player2Board"));
 
-  function renderShips(board, type) {
+  function renderShips(board, type, p2) {
+    let player2Class = "";
+    if (p2) {
+      player2Class = ".p2";
+    }
     if (type === "singles" || type === "quads") {
       board[type].forEach((coord) => {
         document.querySelector(
-          `[data-y="${coord[0]}"][data-x="${coord[1]}"]`
+          `${player2Class}[data-y="${coord[0]}"][data-x="${coord[1]}"]`
         ).classList = `cell ${type}`;
       });
     } else {
       board[type].flat(1).forEach((coord) => {
         document.querySelector(
-          `[data-y="${coord[0]}"][data-x="${coord[1]}"]`
+          `${player2Class}[data-y="${coord[0]}"][data-x="${coord[1]}"]`
         ).classList = `cell ${type}`;
       });
     }
@@ -87,6 +99,11 @@ function renderGameBoards() {
   renderShips(player1Board, "doubles");
   renderShips(player1Board, "triples");
   renderShips(player1Board, "quads");
+
+  renderShips(player2Board, "singles", true);
+  renderShips(player2Board, "doubles", true);
+  renderShips(player2Board, "triples", true);
+  renderShips(player2Board, "quads", true);
 }
 
 function removeNameSelectScreen() {
