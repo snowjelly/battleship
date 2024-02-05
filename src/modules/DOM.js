@@ -63,6 +63,12 @@ function renderGameBoards() {
   const p2Table = document.querySelector(".player2-board-container")
     .children[0];
 
+  function styleAttackResults(result, e) {
+    if (result.illegal) return;
+    if (result.miss) e.target.classList.add("miss");
+    if (result.hit) e.target.classList.add("hit");
+  }
+
   function addCellEventListeners(cell) {
     cell.addEventListener("click", (e) => {
       if (
@@ -71,7 +77,14 @@ function renderGameBoards() {
         !e.target.classList.contains("miss")
       ) {
         const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
-        console.log(players.player1.attack(players.player2, coords));
+        styleAttackResults(
+          players.player1.attack(
+            players.player2,
+            coords,
+            players.player2.board.board
+          ),
+          e
+        );
       }
     });
   }
@@ -93,43 +106,49 @@ function renderGameBoards() {
   tagCells(p1Table);
   tagCells(p2Table);
 
-  const player1Board = JSON.parse(localStorage.getItem("player1REAL"));
-  const player2Board = JSON.parse(localStorage.getItem("player2REAL"));
+  const player1Board = players.player1.board.getBoard();
+  const player2Board = players.player2.board.getBoard();
+  console.log(player1Board);
 
-  const display1 = Gameboard().convertBoardObject(player1Board);
-  const display2 = Gameboard().convertBoardObject(player2Board);
-
-  function renderShips(board, type, p2) {
+  function renderShips(board, p2) {
     let player2Class = "";
     if (p2) {
       player2Class = ".p2";
     }
-    if (type === "singles" || type === "quads") {
-      board[type].forEach((coord) => {
+
+    for (let i = 0; i < board.length; i += 1) {
+      let type;
+      if (board[i].ship) {
+        if (board[i].ship.length === 1) {
+          type = "single";
+        }
+        if (board[i].ship.length === 2) {
+          type = "double";
+        }
+        if (board[i].ship.length === 3) {
+          type = "triple";
+        }
+        if (board[i].ship.length === 4) {
+          type = "quadruple";
+        }
         const cellElement = document.querySelector(
-          `${player2Class}[data-y="${coord[0]}"][data-x="${coord[1]}"]`
+          `${player2Class}[data-y="${board[i].pos[0]}"][data-x="${board[i].pos[1]}"]`
         );
+
         cellElement.classList.add(type, "ship");
-      });
-    } else {
-      board[type].flat(1).forEach((coord) => {
-        const cellElement = document.querySelector(
-          `${player2Class}[data-y="${coord[0]}"][data-x="${coord[1]}"]`
-        );
-        cellElement.classList.add(type, "ship");
-      });
+      }
     }
   }
 
-  renderShips(display1, "singles");
-  renderShips(display1, "doubles");
-  renderShips(display1, "triples");
-  renderShips(display1, "quads");
+  renderShips(player1Board);
+  renderShips(player1Board);
+  renderShips(player1Board);
+  renderShips(player1Board);
 
-  renderShips(display2, "singles", true);
-  renderShips(display2, "doubles", true);
-  renderShips(display2, "triples", true);
-  renderShips(display2, "quads", true);
+  renderShips(player2Board, true);
+  renderShips(player2Board, true);
+  renderShips(player2Board, true);
+  renderShips(player2Board, true);
 }
 
 function removeNameSelectScreen() {

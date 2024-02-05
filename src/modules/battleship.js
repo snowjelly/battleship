@@ -27,6 +27,10 @@ const Gameboard = () => {
 
   const board = generate();
 
+  function getBoard() {
+    return board;
+  }
+
   function getRandomCoordinate() {
     const randomIndex = Math.floor(Math.random() * board.length);
     const startingValue = board[randomIndex];
@@ -58,13 +62,15 @@ const Gameboard = () => {
     return { coords, ship };
   }
 
-  function receiveAttack(coords) {
-    const boardPos = getBoardCoords(coords);
-    if (boardPos.hit) return "Cannot shoot the same coordinate twice";
+  function receiveAttack(coords, b = getBoard()) {
+    const boardPos = getBoardCoords(coords, b);
+    console.log({ boardPos });
+    console.log(coords);
+    if (boardPos.hit || boardPos.miss) return null;
     if (boardPos.ship) {
       boardPos.ship.hit();
       boardPos.hit = true;
-      return boardPos.ship;
+      return true;
     }
     boardPos.miss = true;
     return false;
@@ -243,37 +249,6 @@ const Gameboard = () => {
     return returnValue;
   }
 
-  function convertBoardObject(board) {
-    const singles = [];
-    const doubles = [];
-    const triples = [];
-    const quads = [];
-    for (let i = 0; i < board.length; i += 1) {
-      if (board[i].ship && board[i].ship.length === 1) {
-        singles.push(board[i].pos);
-      }
-
-      if (board[i].ship && board[i].ship.length === 2) {
-        doubles.push(board[i].pos);
-      }
-
-      if (board[i].ship && board[i].ship.length === 3) {
-        triples.push(board[i].pos);
-      }
-
-      if (board[i].ship && board[i].ship.length === 4) {
-        quads.push(board[i].pos);
-      }
-    }
-
-    return {
-      singles,
-      doubles: slicer(doubles, 2),
-      triples: slicer(triples, 3),
-      quads,
-    };
-  }
-
   return {
     placeShip,
     receiveAttack,
@@ -281,19 +256,22 @@ const Gameboard = () => {
     shipsSunk,
     placeShipsRandomly,
     getRandomCoordinate,
-    convertBoardObject,
+    getBoard,
   };
 };
 
 const Player = (name) => {
   const board = Gameboard();
 
-  function attack(player, coords) {
-    const result = player.board.receiveAttack(coords);
-    if (result === false) {
-      return `${name} has missed!`;
+  function attack(player, coords, b = player.board.getBoard()) {
+    const result = player.board.receiveAttack(coords, b);
+    if (result === null) {
+      return { illegal: true, coords };
     }
-    return `${name} has hit ${player.name}'s ship on ${coords}!`;
+    if (result === false) {
+      return { miss: true, coords };
+    }
+    return { hit: true, coords };
   }
 
   return { name, board, attack };

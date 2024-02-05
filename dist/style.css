@@ -91,20 +91,30 @@ button.silly-font:hover {
   justify-content: center;
 }
 
-.singles {
+.single {
   background-color: #db2777;
 }
 
-.doubles {
+.double {
   background-color: #e11d48;
 }
 
-.triples {
+.triple {
   background-color: #0284c7;
 }
 
-.quads {
+.quadruple {
   background-color: #4338ca;
+}
+
+.miss {
+  background-image: url(assets/miss.png);
+  background-size: cover;
+}
+
+.hit {
+  background-image: url(assets/hit.png);
+  background-size: cover;
 }
 
 table {
