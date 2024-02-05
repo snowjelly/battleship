@@ -1,3 +1,4 @@
+import { Gameboard } from "./battleship";
 import { renderBoard1, renderBoard2 } from "./gameBoards";
 import Game from "./gameloop";
 
@@ -14,6 +15,17 @@ function waitForAnimationEnd(animationClassName, querySelector, cb) {
 }
 
 function renderGameBoards() {
+  const players = Game(
+    localStorage.getItem("player1Name"),
+    localStorage.getItem("player2Name")
+  );
+
+  function storageSetTurn(p) {
+    localStorage.setItem("turn", p);
+  }
+
+  storageSetTurn("p1");
+
   document.querySelector("main").innerHTML = `
       <div class="container fade-in"></div>`;
   let cpuText = "";
@@ -51,6 +63,19 @@ function renderGameBoards() {
   const p2Table = document.querySelector(".player2-board-container")
     .children[0];
 
+  function addCellEventListeners(cell) {
+    cell.addEventListener("click", (e) => {
+      if (
+        localStorage.getItem("turn") === "p1" &&
+        e.target.classList.contains("p2") &&
+        !e.target.classList.contains("miss")
+      ) {
+        const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
+        console.log(players.player1.attack(players.player2, coords));
+      }
+    });
+  }
+
   function tagCells(table) {
     for (let i = 1; i < table.rows.length; i += 1) {
       for (let k = 1; k < table.rows[i].cells.length; k += 1) {
@@ -60,6 +85,7 @@ function renderGameBoards() {
         if (table.parentElement.classList.contains("player2-board-container")) {
           cell.classList.add("p2");
         }
+        addCellEventListeners(cell);
       }
     }
   }
@@ -67,13 +93,11 @@ function renderGameBoards() {
   tagCells(p1Table);
   tagCells(p2Table);
 
-  Game(
-    localStorage.getItem("player1Name"),
-    localStorage.getItem("player2Name")
-  );
+  const player1Board = JSON.parse(localStorage.getItem("player1REAL"));
+  const player2Board = JSON.parse(localStorage.getItem("player2REAL"));
 
-  const player1Board = JSON.parse(localStorage.getItem("player1Board"));
-  const player2Board = JSON.parse(localStorage.getItem("player2Board"));
+  const display1 = Gameboard().convertBoardObject(player1Board);
+  const display2 = Gameboard().convertBoardObject(player2Board);
 
   function renderShips(board, type, p2) {
     let player2Class = "";
@@ -82,28 +106,30 @@ function renderGameBoards() {
     }
     if (type === "singles" || type === "quads") {
       board[type].forEach((coord) => {
-        document.querySelector(
+        const cellElement = document.querySelector(
           `${player2Class}[data-y="${coord[0]}"][data-x="${coord[1]}"]`
-        ).classList = `cell ${type}`;
+        );
+        cellElement.classList.add(type, "ship");
       });
     } else {
       board[type].flat(1).forEach((coord) => {
-        document.querySelector(
+        const cellElement = document.querySelector(
           `${player2Class}[data-y="${coord[0]}"][data-x="${coord[1]}"]`
-        ).classList = `cell ${type}`;
+        );
+        cellElement.classList.add(type, "ship");
       });
     }
   }
 
-  renderShips(player1Board, "singles");
-  renderShips(player1Board, "doubles");
-  renderShips(player1Board, "triples");
-  renderShips(player1Board, "quads");
+  renderShips(display1, "singles");
+  renderShips(display1, "doubles");
+  renderShips(display1, "triples");
+  renderShips(display1, "quads");
 
-  renderShips(player2Board, "singles", true);
-  renderShips(player2Board, "doubles", true);
-  renderShips(player2Board, "triples", true);
-  renderShips(player2Board, "quads", true);
+  renderShips(display2, "singles", true);
+  renderShips(display2, "doubles", true);
+  renderShips(display2, "triples", true);
+  renderShips(display2, "quads", true);
 }
 
 function removeNameSelectScreen() {

@@ -153,36 +153,36 @@ const Gameboard = () => {
     return coords[randomAxis];
   }
 
-  function placeShipsRandomly() {
-    function slicer(arr, type) {
-      const newArr = [];
-      let start;
-      let end;
-      let newArrLength;
-      let startIncrement;
-      let endIncrement;
-      if (type === 2 || type === "double") {
-        start = 0;
-        end = 2;
-        newArrLength = 3;
-        startIncrement = 2;
-        endIncrement = 2;
-      }
-      if (type === 3 || type === "triple") {
-        start = 0;
-        end = 3;
-        newArrLength = 2;
-        startIncrement = 3;
-        endIncrement = 3;
-      }
-      for (let i = 0; i < newArrLength; i += 1) {
-        newArr.push(arr.slice(start, end));
-        start += startIncrement;
-        end += endIncrement;
-      }
-      return newArr;
+  function slicer(arr, type) {
+    const newArr = [];
+    let start;
+    let end;
+    let newArrLength;
+    let startIncrement;
+    let endIncrement;
+    if (type === 2 || type === "double") {
+      start = 0;
+      end = 2;
+      newArrLength = 3;
+      startIncrement = 2;
+      endIncrement = 2;
     }
+    if (type === 3 || type === "triple") {
+      start = 0;
+      end = 3;
+      newArrLength = 2;
+      startIncrement = 3;
+      endIncrement = 3;
+    }
+    for (let i = 0; i < newArrLength; i += 1) {
+      newArr.push(arr.slice(start, end));
+      start += startIncrement;
+      end += endIncrement;
+    }
+    return newArr;
+  }
 
+  function placeShipsRandomly() {
     const shipCoords = new Set();
     let numberOfCoordinatePairs = 0;
 
@@ -243,6 +243,37 @@ const Gameboard = () => {
     return returnValue;
   }
 
+  function convertBoardObject(board) {
+    const singles = [];
+    const doubles = [];
+    const triples = [];
+    const quads = [];
+    for (let i = 0; i < board.length; i += 1) {
+      if (board[i].ship && board[i].ship.length === 1) {
+        singles.push(board[i].pos);
+      }
+
+      if (board[i].ship && board[i].ship.length === 2) {
+        doubles.push(board[i].pos);
+      }
+
+      if (board[i].ship && board[i].ship.length === 3) {
+        triples.push(board[i].pos);
+      }
+
+      if (board[i].ship && board[i].ship.length === 4) {
+        quads.push(board[i].pos);
+      }
+    }
+
+    return {
+      singles,
+      doubles: slicer(doubles, 2),
+      triples: slicer(triples, 3),
+      quads,
+    };
+  }
+
   return {
     placeShip,
     receiveAttack,
@@ -250,6 +281,7 @@ const Gameboard = () => {
     shipsSunk,
     placeShipsRandomly,
     getRandomCoordinate,
+    convertBoardObject,
   };
 };
 
