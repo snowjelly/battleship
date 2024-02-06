@@ -38,9 +38,10 @@ const Gameboard = () => {
   }
 
   function getBoardCoords(pos) {
-    for (let i = 0; i < board.length; i += 1) {
-      if (board[i].pos[0] === pos[0] && board[i].pos[1] === pos[1]) {
-        return board[i];
+    const b = getBoard();
+    for (let i = 0; i < b.length; i += 1) {
+      if (b[i].pos[0] === pos[0] && b[i].pos[1] === pos[1]) {
+        return b[i];
       }
     }
     return null;
@@ -62,8 +63,8 @@ const Gameboard = () => {
     return { coords, ship };
   }
 
-  function receiveAttack(coords, b = getBoard()) {
-    const boardPos = getBoardCoords(coords, b);
+  function receiveAttack(coords) {
+    const boardPos = getBoardCoords(coords);
     console.log({ boardPos });
     console.log(coords);
     if (boardPos.hit || boardPos.miss) return null;
@@ -263,8 +264,8 @@ const Gameboard = () => {
 const Player = (name) => {
   const board = Gameboard();
 
-  function attack(player, coords, b = player.board.getBoard()) {
-    const result = player.board.receiveAttack(coords, b);
+  function attack(opponent, coords) {
+    const result = opponent.board.receiveAttack(coords);
     if (result === null) {
       return { illegal: true, coords };
     }

@@ -6,8 +6,8 @@ const Game = (player1Name, player2Name) => {
   player1.board.placeShipsRandomly();
   player2.board.placeShipsRandomly();
 
-  console.log(player1.board.board);
-  console.log(player2.board.board);
+  console.log(player1.board.getBoard());
+  console.log(player2.board.getBoard());
 
   return { player1, player2 };
 };

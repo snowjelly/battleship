@@ -77,14 +77,7 @@ function renderGameBoards() {
         !e.target.classList.contains("miss")
       ) {
         const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
-        styleAttackResults(
-          players.player1.attack(
-            players.player2,
-            coords,
-            players.player2.board.board
-          ),
-          e
-        );
+        styleAttackResults(players.player1.attack(players.player2, coords), e);
       }
     });
   }
@@ -108,7 +101,6 @@ function renderGameBoards() {
 
   const player1Board = players.player1.board.getBoard();
   const player2Board = players.player2.board.getBoard();
-  console.log(player1Board);
 
   function renderShips(board, p2) {
     let player2Class = "";
@@ -132,7 +124,7 @@ function renderGameBoards() {
           type = "quadruple";
         }
         const cellElement = document.querySelector(
-          `${player2Class}[data-y="${board[i].pos[0]}"][data-x="${board[i].pos[1]}"]`
+          `${player2Class}[data-y="${board[i].pos[1]}"][data-x="${board[i].pos[0]}"]`
         );
 
         cellElement.classList.add(type, "ship");
