@@ -14,11 +14,18 @@ function waitForAnimationEnd(animationClassName, querySelector, cb) {
   });
 }
 
+function styleAttackResults(result, e) {
+  if (result.illegal) return;
+  if (result.miss) e.target.classList.add("miss");
+  if (result.hit) e.target.classList.add("hit");
+}
+
 function renderGameBoards() {
-  const players = Game(
+  const game = Game(
     localStorage.getItem("player1Name"),
     localStorage.getItem("player2Name")
   );
+  const { players } = game;
 
   function storageSetTurn(p) {
     localStorage.setItem("turn", p);
@@ -63,40 +70,9 @@ function renderGameBoards() {
   const p2Table = document.querySelector(".player2-board-container")
     .children[0];
 
-  function styleAttackResults(result, e) {
-    if (result.illegal) return;
-    if (result.miss) e.target.classList.add("miss");
-    if (result.hit) e.target.classList.add("hit");
-  }
-
   function addCellEventListeners(cell) {
     cell.addEventListener("click", (e) => {
-      if (
-        localStorage.getItem("turn") === "p1" &&
-        e.target.classList.contains("p2") &&
-        !e.target.classList.contains("miss") &&
-        !e.target.classList.contains("hit")
-      ) {
-        const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
-        styleAttackResults(players.player1.attack(players.player2, coords), e);
-        if (players.player2.board.shipsSunk().sunk) {
-          console.log(`${players.player1.name} wins!`);
-        }
-        Storage().changeTurn();
-      }
-      if (
-        localStorage.getItem("turn") === "p2" &&
-        !e.target.classList.contains("p2") &&
-        !e.target.classList.contains("miss") &&
-        !e.target.classList.contains("hit")
-      ) {
-        const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
-        styleAttackResults(players.player2.attack(players.player1, coords), e);
-        if (players.player1.board.shipsSunk().sunk) {
-          console.log(`${players.player2.name} wins!`);
-        }
-        Storage().changeTurn();
-      }
+      game.next(e, styleAttackResults);
     });
   }
 
