@@ -78,6 +78,7 @@ function renderGameBoards() {
       ) {
         const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
         styleAttackResults(players.player1.attack(players.player2, coords), e);
+        console.log(players.player2.board.shipsSunk());
       }
     });
   }

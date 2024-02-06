@@ -65,8 +65,6 @@ const Gameboard = () => {
 
   function receiveAttack(coords) {
     const boardPos = getBoardCoords(coords);
-    console.log({ boardPos });
-    console.log(coords);
     if (boardPos.hit || boardPos.miss) return null;
     if (boardPos.ship) {
       boardPos.ship.hit();
@@ -242,8 +240,8 @@ const Gameboard = () => {
       });
     });
 
+    const ship = Ship(4);
     returnValue.quads.forEach((coord) => {
-      const ship = Ship(4);
       placeShip(ship, coord);
     });
 
