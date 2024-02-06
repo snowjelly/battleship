@@ -72,7 +72,9 @@ function renderGameBoards() {
 
   function addCellEventListeners(cell) {
     cell.addEventListener("click", (e) => {
-      game.next(e, styleAttackResults);
+      if (game.next(e, styleAttackResults) === "gameover") {
+        renderGameEnd();
+      }
     });
   }
 
@@ -135,6 +137,35 @@ function renderGameBoards() {
   renderShips(player2Board, true);
   renderShips(player2Board, true);
   renderShips(player2Board, true);
+}
+
+function addGameOverEventListeners() {
+  const retryBtn = document.querySelector(".retry-btn");
+
+  retryBtn.addEventListener("click", (e) => {
+    renderGameBoards();
+  });
+}
+
+function renderGameEnd() {
+  document.querySelector("main").innerHTML = "";
+  document.querySelector("main").insertAdjacentHTML(
+    "beforeend",
+    `
+    <div class="game-over-container">
+      <div class="game-over-content">
+        <h1>Game Over</h1>
+        <h2>${localStorage.getItem("winner")} wins!</h1>
+        <h2> Play again? </h2>
+        <div class="game-over-prompt">
+          <button type="button" class="retry-btn">Retry</button>
+          <button type="button" class="new-players-btn">New Players</button>
+        </div>
+      </div>
+    </div>
+  `
+  );
+  addGameOverEventListeners();
 }
 
 function removeNameSelectScreen() {
@@ -216,3 +247,4 @@ addOpponentSelectEventListeners();
 
 removeWelcomeScreen();
 renderGameBoards();
+renderGameEnd();

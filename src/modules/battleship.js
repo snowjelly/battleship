@@ -226,24 +226,24 @@ const Gameboard = () => {
       placeShip(Ship(1), coord);
     });
 
-    returnValue.doubles.forEach((doubleCoord) => {
-      const ship = Ship(2);
-      doubleCoord.forEach((singleCoord) => {
-        placeShip(ship, singleCoord);
-      });
-    });
+    // returnValue.doubles.forEach((doubleCoord) => {
+    //   const ship = Ship(2);
+    //   doubleCoord.forEach((singleCoord) => {
+    //     placeShip(ship, singleCoord);
+    //   });
+    // });
 
-    returnValue.triples.forEach((tripleCoord) => {
-      const ship = Ship(3);
-      tripleCoord.forEach((singleCoord) => {
-        placeShip(ship, singleCoord);
-      });
-    });
+    // returnValue.triples.forEach((tripleCoord) => {
+    //   const ship = Ship(3);
+    //   tripleCoord.forEach((singleCoord) => {
+    //     placeShip(ship, singleCoord);
+    //   });
+    // });
 
-    const ship = Ship(4);
-    returnValue.quads.forEach((coord) => {
-      placeShip(ship, coord);
-    });
+    // const ship = Ship(4);
+    // returnValue.quads.forEach((coord) => {
+    //   placeShip(ship, coord);
+    // });
 
     return returnValue;
   }

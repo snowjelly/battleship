@@ -117,6 +117,14 @@ button.silly-font:hover {
   background-size: cover;
 }
 
+.game-over-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+}
+
 table {
   border-collapse: collapse;
 }

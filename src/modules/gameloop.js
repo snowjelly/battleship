@@ -23,6 +23,8 @@ const Game = (player1Name, player2Name) => {
       styleResults(player1.attack(player2, coords), e);
       if (player2.board.shipsSunk().sunk) {
         console.log(`${player1.name} wins!`);
+        localStorage.setItem("winner", player1.name);
+        return "gameover";
       }
     }
     if (
@@ -36,8 +38,11 @@ const Game = (player1Name, player2Name) => {
       styleResults(player2.attack(player1, coords), e);
       if (player1.board.shipsSunk().sunk) {
         console.log(`${player2.name} wins!`);
+        localStorage.setItem("winner", player2.name);
+        return "gameover";
       }
     }
+    return null;
   }
 
   return { players: { player1, player2 }, next };
