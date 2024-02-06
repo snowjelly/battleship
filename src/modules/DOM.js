@@ -1,4 +1,4 @@
-import { Gameboard } from "./battleship";
+import { Gameboard, Storage } from "./battleship";
 import { renderBoard1, renderBoard2 } from "./gameBoards";
 import Game from "./gameloop";
 
@@ -74,13 +74,28 @@ function renderGameBoards() {
       if (
         localStorage.getItem("turn") === "p1" &&
         e.target.classList.contains("p2") &&
-        !e.target.classList.contains("miss")
+        !e.target.classList.contains("miss") &&
+        !e.target.classList.contains("hit")
       ) {
         const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
         styleAttackResults(players.player1.attack(players.player2, coords), e);
         if (players.player2.board.shipsSunk().sunk) {
           console.log(`${players.player1.name} wins!`);
         }
+        Storage().changeTurn();
+      }
+      if (
+        localStorage.getItem("turn") === "p2" &&
+        !e.target.classList.contains("p2") &&
+        !e.target.classList.contains("miss") &&
+        !e.target.classList.contains("hit")
+      ) {
+        const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
+        styleAttackResults(players.player2.attack(players.player1, coords), e);
+        if (players.player1.board.shipsSunk().sunk) {
+          console.log(`${players.player2.name} wins!`);
+        }
+        Storage().changeTurn();
       }
     });
   }

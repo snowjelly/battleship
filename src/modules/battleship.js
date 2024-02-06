@@ -276,4 +276,17 @@ const Player = (name) => {
   return { name, board, attack };
 };
 
-export { Ship, Gameboard, Player };
+const Storage = () => {
+  const turn = localStorage.getItem("turn");
+  function changeTurn() {
+    if (turn === "p1") {
+      localStorage.setItem("turn", "p2");
+    }
+    if (turn === "p2") {
+      localStorage.setItem("turn", "p1");
+    }
+  }
+  return { changeTurn };
+};
+
+export { Ship, Gameboard, Player, Storage };

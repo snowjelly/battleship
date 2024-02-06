@@ -9,6 +9,8 @@ const Game = (player1Name, player2Name) => {
   console.log(player1.board.getBoard());
   console.log(player2.board.getBoard());
 
+  localStorage.setItem("turn", "p1");
+
   return { player1, player2 };
 };
 
