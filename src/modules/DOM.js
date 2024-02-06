@@ -1,4 +1,3 @@
-import { Gameboard, Storage } from "./battleship";
 import { renderBoard1, renderBoard2 } from "./gameBoards";
 import Game from "./gameloop";
 
@@ -14,10 +13,21 @@ function waitForAnimationEnd(animationClassName, querySelector, cb) {
   });
 }
 
+function changeNameColorOnTurn() {
+  if (localStorage.getItem("turn") === "p1") {
+    document.querySelector(".player2-name").classList.add("turn");
+    document.querySelector(".player1-name").classList.remove("turn");
+  } else {
+    document.querySelector(".player1-name").classList.add("turn");
+    document.querySelector(".player2-name").classList.remove("turn");
+  }
+}
+
 function styleAttackResults(result, e) {
   if (result.illegal) return;
   if (result.miss) e.target.classList.add("miss");
   if (result.hit) e.target.classList.add("hit");
+  changeNameColorOnTurn();
 }
 
 function renderGameBoards() {
@@ -39,9 +49,11 @@ function renderGameBoards() {
   if (localStorage.getItem("opponent") === "ai") cpuText = "(CPU)";
 
   function renderPlayer1Name() {
+    let turn = "";
+    if (localStorage.getItem("turn") === "p1") turn = "turn";
     const html = `
       <div class="player-names">
-        <div class="player1-name name silly-font">
+        <div class="player1-name name silly-font ${turn}">
           ${localStorage.getItem("player1Name")}
         </div>
         `;
@@ -49,8 +61,10 @@ function renderGameBoards() {
   }
 
   function renderPlayer2Name() {
+    let turn = "";
+    if (localStorage.getItem("turn") === "p2") turn = "turn";
     const html = `
-        <div class="player2-name name silly-font">
+        <div class="player2-name name silly-font ${turn}">
           ${localStorage.getItem("player2Name")} ${cpuText}
         </div>
       </div>
@@ -217,7 +231,7 @@ function addOpponentSelectEventListeners() {
   const aiBtn = document.querySelector("#ai");
   const humanBtn = document.querySelector("#human");
 
-  aiBtn.addEventListener("click", (e) => {
+  aiBtn.addEventListener("click", () => {
     localStorage.setItem("opponent", "ai");
     waitForAnimationEnd("fade-out", ".welcome", removeWelcomeScreen);
     waitForAnimationEnd("fade-out", ".welcome", () => {
@@ -225,7 +239,7 @@ function addOpponentSelectEventListeners() {
     });
   });
 
-  humanBtn.addEventListener("click", (e) => {
+  humanBtn.addEventListener("click", () => {
     localStorage.setItem("opponent", "human");
     waitForAnimationEnd("fade-out", ".welcome", removeWelcomeScreen);
     waitForAnimationEnd("fade-out", ".welcome", renderNameSelection);

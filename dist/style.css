@@ -143,6 +143,10 @@ table {
   animation: fadeOut 1s;
 }
 
+.turn {
+  color: #0284c7;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
