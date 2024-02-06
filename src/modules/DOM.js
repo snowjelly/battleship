@@ -139,33 +139,22 @@ function renderGameBoards() {
   renderShips(player2Board, true);
 }
 
-function addGameOverEventListeners() {
-  const retryBtn = document.querySelector(".retry-btn");
-
-  retryBtn.addEventListener("click", (e) => {
-    renderGameBoards();
-  });
-}
-
-function renderGameEnd() {
-  document.querySelector("main").innerHTML = "";
-  document.querySelector("main").insertAdjacentHTML(
-    "beforeend",
-    `
-    <div class="game-over-container">
-      <div class="game-over-content">
-        <h1>Game Over</h1>
-        <h2>${localStorage.getItem("winner")} wins!</h1>
-        <h2> Play again? </h2>
-        <div class="game-over-prompt">
-          <button type="button" class="retry-btn">Retry</button>
-          <button type="button" class="new-players-btn">New Players</button>
+function renderWelcomeScreen() {
+  document.querySelector("main").innerHTML = `
+  <div class="welcome fade-in">
+        <h1>Welcome to Battleship</h1>
+        <h2 class="question">Face an A.I or human opponent?</h2>
+        <div class="select-opponent-btns">
+          <img src="./assets/ai.jpg" alt="ai" class="opponent-btn" id="ai" />
+          <img
+            src="./assets/human.jpg"
+            alt="human"
+            class="opponent-btn"
+            id="human"
+          />
         </div>
       </div>
-    </div>
-  `
-  );
-  addGameOverEventListeners();
+  `;
 }
 
 function removeNameSelectScreen() {
@@ -241,6 +230,41 @@ function addOpponentSelectEventListeners() {
     waitForAnimationEnd("fade-out", ".welcome", removeWelcomeScreen);
     waitForAnimationEnd("fade-out", ".welcome", renderNameSelection);
   });
+}
+
+function addGameOverEventListeners() {
+  const retryBtn = document.querySelector(".retry-btn");
+  const newPlayers = document.querySelector(".new-players-btn");
+
+  retryBtn.addEventListener("click", (e) => {
+    renderGameBoards();
+  });
+
+  newPlayers.addEventListener("click", (e) => {
+    renderWelcomeScreen();
+    addOpponentSelectEventListeners();
+  });
+}
+
+function renderGameEnd() {
+  document.querySelector("main").innerHTML = "";
+  document.querySelector("main").insertAdjacentHTML(
+    "beforeend",
+    `
+    <div class="game-over-container">
+      <div class="game-over-content">
+        <h1>Game Over</h1>
+        <h2>${localStorage.getItem("winner")} wins!</h1>
+        <h2> Play again? </h2>
+        <div class="game-over-prompt">
+          <button type="button" class="retry-btn">Retry</button>
+          <button type="button" class="new-players-btn">New Players</button>
+        </div>
+      </div>
+    </div>
+  `
+  );
+  addGameOverEventListeners();
 }
 
 addOpponentSelectEventListeners();
