@@ -43,6 +43,10 @@ function renderPlayer1Name() {
 }
 
 function renderGameBoard1() {
+  const game = Game(
+    localStorage.getItem("player1Name"),
+    localStorage.getItem("player2Name")
+  );
   const main = document.querySelector("main");
   main.innerHTML = `
       <div class="container fade-in"></div>`;
@@ -50,6 +54,37 @@ function renderGameBoard1() {
 
   container.insertAdjacentHTML("beforeend", renderPlayer1Name());
   container.insertAdjacentHTML("beforeend", renderBoard1());
+
+  const p1Table = document.querySelector(".player1-board-container")
+    .children[0];
+
+  const cells = [];
+
+  function addCellEventListeners(cell) {
+    cell.addEventListener("mouseover", (e) => {
+      if (cells.length) {
+        cells.shift().classList.remove("quadruple");
+      }
+      cells.push(e.target);
+      e.target.classList.add("quadruple");
+    });
+  }
+
+  function tagCells(table) {
+    for (let i = 1; i < table.rows.length; i += 1) {
+      for (let k = 1; k < table.rows[i].cells.length; k += 1) {
+        const cell = table.rows[i].cells[k];
+        cell.setAttribute("data-y", i - 1);
+        cell.setAttribute("data-x", k - 1);
+        if (table.parentElement.classList.contains("player2-board-container")) {
+          cell.classList.add("p2");
+        }
+        addCellEventListeners(cell);
+      }
+    }
+  }
+
+  tagCells(p1Table);
 }
 
 function renderGameBoards() {
@@ -165,7 +200,13 @@ function renderGameBoards() {
 }
 
 function renderShipInventory() {
-  document.querySelector();
+  const html = `
+    <div class="ship-inventory">
+      <div class=
+    </div>
+  `;
+
+  document.querySelector(".playerNames").insertAdjacentHTML("beforeend");
 }
 
 function renderWelcomeScreen() {

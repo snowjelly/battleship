@@ -248,6 +248,10 @@ const Gameboard = () => {
     return returnValue;
   }
 
+  function getShipInventory() {
+    return [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+  }
+
   return {
     placeShip,
     receiveAttack,
@@ -256,6 +260,7 @@ const Gameboard = () => {
     placeShipsRandomly,
     getRandomCoordinate,
     getBoard,
+    getShipInventory,
   };
 };
 
