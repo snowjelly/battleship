@@ -291,7 +291,24 @@ const Storage = () => {
       localStorage.setItem("turn", "p1");
     }
   }
-  return { changeTurn };
+
+  function initRotation() {
+    localStorage.setItem("rotate", false);
+  }
+
+  if (localStorage.getItem("rotate") === null) {
+    initRotation();
+  }
+
+  function changeRotation() {
+    if (localStorage.getItem("rotate") === "false") {
+      localStorage.setItem("rotate", true);
+    } else if (localStorage.getItem("rotate") === "true") {
+      localStorage.setItem("rotate", false);
+    }
+  }
+
+  return { changeTurn, changeRotation, initRotation };
 };
 
 export { Ship, Gameboard, Player, Storage };

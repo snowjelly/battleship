@@ -1,5 +1,6 @@
 import { renderBoard1, renderBoard2 } from "./gameBoards";
 import Game from "./gameloop";
+import { Storage } from "./battleship";
 
 function removeWelcomeScreen() {
   document.querySelector(".welcome").remove();
@@ -42,7 +43,88 @@ function renderPlayer1Name() {
   return html;
 }
 
-function renderGameBoard1() {
+function hoverHighlightPlacement(e, cellsArr, rotate = false) {
+  if (cellsArr === null) return;
+  if (rotate) {
+    while (cellsArr.length) {
+      cellsArr.shift().classList.remove("quadruple");
+    }
+    for (let i = 0; i < 4; i += 1) {
+      const adjacentCell = document.querySelector(
+        `.cell[data-x="${e.target.dataset.x}"][data-y="${
+          Number(e.target.dataset.y) + i
+        }"]`
+      );
+      if (adjacentCell === null) return;
+      cellsArr.push(adjacentCell);
+      adjacentCell.classList.add("quadruple");
+    }
+  } else {
+    while (cellsArr.length) {
+      cellsArr.shift().classList.remove("quadruple");
+    }
+    for (let i = 0; i < 4; i += 1) {
+      const adjacentCell = document.querySelector(
+        `.cell[data-x="${Number(e.target.dataset.x) + i}"][data-y="${
+          e.target.dataset.y
+        }"]`
+      );
+      if (adjacentCell === null) return;
+      cellsArr.push(adjacentCell);
+      adjacentCell.classList.add("quadruple");
+    }
+  }
+}
+
+function addCellEventListeners(cell, cellsArr, rotate = false) {
+  cell.addEventListener("mouseover", (e) => {
+    if (rotate) {
+      hoverHighlightPlacement(e, cellsArr, rotate);
+    } else {
+      hoverHighlightPlacement(e, cellsArr);
+    }
+  });
+}
+
+function tagCells(table, cellsArr, rotate = false) {
+  for (let i = 1; i < table.rows.length; i += 1) {
+    for (let k = 1; k < table.rows[i].cells.length; k += 1) {
+      const cell = table.rows[i].cells[k];
+      cell.setAttribute("data-y", i - 1);
+      cell.setAttribute("data-x", k - 1);
+      if (table.parentElement.classList.contains("player2-board-container")) {
+        cell.classList.add("p2");
+      }
+      if (rotate) {
+        addCellEventListeners(cell, cellsArr, rotate);
+      } else {
+        addCellEventListeners(cell, cellsArr);
+      }
+    }
+  }
+}
+function addRotateEventListener() {
+  const inv = document.querySelector(".ship-inventory");
+  const p1Table = document.querySelector(".player1-board-container")
+    .children[0];
+  inv.addEventListener("click", () => {
+    Storage().changeRotation();
+    renderGameBoard1(JSON.parse(localStorage.getItem("rotate")));
+  });
+}
+
+function renderShipInventory() {
+  const html = `
+    <div class="ship-inventory">
+      <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 -960 960 960" width="50"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
+    </div>
+  `;
+
+  document.querySelector(".player-names").insertAdjacentHTML("afterend", html);
+  addRotateEventListener();
+}
+
+function renderGameBoard1(rotate = false) {
   const game = Game(
     localStorage.getItem("player1Name"),
     localStorage.getItem("player2Name")
@@ -54,45 +136,18 @@ function renderGameBoard1() {
 
   container.insertAdjacentHTML("beforeend", renderPlayer1Name());
   container.insertAdjacentHTML("beforeend", renderBoard1());
+  renderShipInventory();
 
   const p1Table = document.querySelector(".player1-board-container")
     .children[0];
 
   const cells = [];
 
-  function addCellEventListeners(cell) {
-    cell.addEventListener("mouseover", (e) => {
-      while (cells.length) {
-        cells.shift().classList.remove("quadruple");
-      }
-      for (let i = 0; i < 4; i += 1) {
-        const adjacentCell = document.querySelector(
-          `.cell[data-x="${Number(e.target.dataset.x) + i}"][data-y="${
-            e.target.dataset.y
-          }"]`
-        );
-        if (adjacentCell === null) return;
-        cells.push(adjacentCell);
-        adjacentCell.classList.add("quadruple");
-      }
-    });
+  if (rotate) {
+    tagCells(p1Table, cells, rotate);
+  } else {
+    tagCells(p1Table, cells);
   }
-
-  function tagCells(table) {
-    for (let i = 1; i < table.rows.length; i += 1) {
-      for (let k = 1; k < table.rows[i].cells.length; k += 1) {
-        const cell = table.rows[i].cells[k];
-        cell.setAttribute("data-y", i - 1);
-        cell.setAttribute("data-x", k - 1);
-        if (table.parentElement.classList.contains("player2-board-container")) {
-          cell.classList.add("p2");
-        }
-        addCellEventListeners(cell);
-      }
-    }
-  }
-
-  tagCells(p1Table);
 }
 
 function renderGameBoards() {
@@ -205,16 +260,6 @@ function renderGameBoards() {
     renderShips(player2Board, true);
     renderShips(player2Board, true);
   }
-}
-
-function renderShipInventory() {
-  const html = `
-    <div class="ship-inventory">
-      <div class=
-    </div>
-  `;
-
-  document.querySelector(".playerNames").insertAdjacentHTML("beforeend");
 }
 
 function renderWelcomeScreen() {

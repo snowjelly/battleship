@@ -147,6 +147,11 @@ table {
   color: #0284c7;
 }
 
+.ship-inventory {
+  display: flex;
+  justify-content: center;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
