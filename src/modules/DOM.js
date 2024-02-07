@@ -62,11 +62,19 @@ function renderGameBoard1() {
 
   function addCellEventListeners(cell) {
     cell.addEventListener("mouseover", (e) => {
-      if (cells.length) {
+      while (cells.length) {
         cells.shift().classList.remove("quadruple");
       }
-      cells.push(e.target);
-      e.target.classList.add("quadruple");
+      for (let i = 0; i < 4; i += 1) {
+        const adjacentCell = document.querySelector(
+          `.cell[data-x="${Number(e.target.dataset.x) + i}"][data-y="${
+            e.target.dataset.y
+          }"]`
+        );
+        if (adjacentCell === null) return;
+        cells.push(adjacentCell);
+        adjacentCell.classList.add("quadruple");
+      }
     });
   }
 
