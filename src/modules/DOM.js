@@ -30,6 +30,28 @@ function styleAttackResults(result, e) {
   changeNameColorOnTurn();
 }
 
+function renderPlayer1Name() {
+  let turn = "";
+  if (localStorage.getItem("turn") === "p1") turn = "turn";
+  const html = `
+      <div class="player-names">
+        <div class="player1-name name silly-font ${turn}">
+          ${localStorage.getItem("player1Name")}
+        </div>
+        `;
+  return html;
+}
+
+function renderGameBoard1() {
+  const main = document.querySelector("main");
+  main.innerHTML = `
+      <div class="container fade-in"></div>`;
+  const container = document.querySelector(".container");
+
+  container.insertAdjacentHTML("beforeend", renderPlayer1Name());
+  container.insertAdjacentHTML("beforeend", renderBoard1());
+}
+
 function renderGameBoards() {
   const game = Game(
     localStorage.getItem("player1Name"),
@@ -47,18 +69,6 @@ function renderGameBoards() {
       <div class="container fade-in"></div>`;
   let cpuText = "";
   if (localStorage.getItem("opponent") === "ai") cpuText = "(CPU)";
-
-  function renderPlayer1Name() {
-    let turn = "";
-    if (localStorage.getItem("turn") === "p1") turn = "turn";
-    const html = `
-      <div class="player-names">
-        <div class="player1-name name silly-font ${turn}">
-          ${localStorage.getItem("player1Name")}
-        </div>
-        `;
-    return html;
-  }
 
   function renderPlayer2Name() {
     let turn = "";
@@ -106,12 +116,6 @@ function renderGameBoards() {
     }
   }
 
-  tagCells(p1Table);
-  tagCells(p2Table);
-
-  const player1Board = players.player1.board.getBoard();
-  const player2Board = players.player2.board.getBoard();
-
   function renderShips(board, p2) {
     let player2Class = "";
     if (p2) {
@@ -141,16 +145,27 @@ function renderGameBoards() {
       }
     }
   }
+  function init() {
+    tagCells(p1Table);
+    tagCells(p2Table);
 
-  renderShips(player1Board);
-  renderShips(player1Board);
-  renderShips(player1Board);
-  renderShips(player1Board);
+    const player1Board = players.player1.board.getBoard();
+    const player2Board = players.player2.board.getBoard();
 
-  renderShips(player2Board, true);
-  renderShips(player2Board, true);
-  renderShips(player2Board, true);
-  renderShips(player2Board, true);
+    renderShips(player1Board);
+    renderShips(player1Board);
+    renderShips(player1Board);
+    renderShips(player1Board);
+
+    renderShips(player2Board, true);
+    renderShips(player2Board, true);
+    renderShips(player2Board, true);
+    renderShips(player2Board, true);
+  }
+}
+
+function renderShipInventory() {
+  document.querySelector();
 }
 
 function renderWelcomeScreen() {
@@ -192,7 +207,7 @@ function addNameSubmitBtnEventListeners() {
     }
     storageSetPlayerNames(player1Name, player2Name);
     waitForAnimationEnd("fade-out", ".name-selection", removeNameSelectScreen);
-    waitForAnimationEnd("fade-out", ".name-selection", renderGameBoards);
+    waitForAnimationEnd("fade-out", ".name-selection", renderGameBoard1);
   });
 }
 
@@ -251,7 +266,7 @@ function addGameOverEventListeners() {
   const newPlayers = document.querySelector(".new-players-btn");
 
   retryBtn.addEventListener("click", (e) => {
-    renderGameBoards();
+    renderGameBoard1();
   });
 
   newPlayers.addEventListener("click", (e) => {
