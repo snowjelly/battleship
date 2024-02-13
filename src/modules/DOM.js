@@ -1,6 +1,6 @@
 import { renderBoard1, renderBoard2 } from "./gameBoards";
 import Game from "./gameloop";
-import { Storage } from "./battleship";
+import { Storage, Gameboard } from "./battleship";
 
 function removeWelcomeScreen() {
   document.querySelector(".welcome").remove();
@@ -76,14 +76,12 @@ function hoverHighlightPlacement(e, cellsArr, rotate = false) {
   }
 }
 
-function storeShipPlacement(e, shipGhost) {
-  const arrCoords = [];
-  let targ = e.target;
+function getShipPlacementCoords(shipGhost) {
+  const shipArr = [];
   for (let i = 0; i < shipGhost.length; i += 1) {
-    arrCoords.push(targ);
-    targ = targ.nextElementSibling;
+    shipArr.push([shipGhost[i].dataset.x, shipGhost[i].dataset.y]);
   }
-  return arrCoords;
+  Storage().storeShip(shipArr);
 }
 
 function addCellEventListeners(cell, cellsArr, rotate = false) {
@@ -95,10 +93,24 @@ function addCellEventListeners(cell, cellsArr, rotate = false) {
     }
   });
   cell.addEventListener("click", (e) => {
-    const shipGhost = document.querySelectorAll(".quadruple");
-    if (shipGhost.length < 4) return;
+    const nextShip = Storage().getNextShip();
+    if (nextShip === 4) {
+      const shipGhost = document.querySelectorAll(".quadruple");
+      getShipPlacementCoords(shipGhost);
+    }
+    if (nextShip === 3) {
+      const shipGhost = document.querySelectorAll(".triple");
+      getShipPlacementCoords(shipGhost);
+    }
+    if (nextShip === 2) {
+      const shipGhost = document.querySelectorAll(".double");
+      getShipPlacementCoords(shipGhost);
+    }
+    if (nextShip === 1) {
+      const shipGhost = document.querySelectorAll(".single");
+      getShipPlacementCoords(shipGhost);
+    }
     console.log(e.target);
-    storeShipPlacement(e, shipGhost);
   });
 }
 
@@ -141,6 +153,7 @@ function renderShipInventory() {
 }
 
 function renderGameBoard1(rotate = false) {
+  Storage().resetShips();
   const game = Game(
     localStorage.getItem("player1Name"),
     localStorage.getItem("player2Name")

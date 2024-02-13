@@ -282,8 +282,8 @@ const Player = (name) => {
 };
 
 const Storage = () => {
-  const turn = localStorage.getItem("turn");
   function changeTurn() {
+    const turn = localStorage.getItem("turn");
     if (turn === "p1") {
       localStorage.setItem("turn", "p2");
     }
@@ -300,6 +300,17 @@ const Storage = () => {
     initRotation();
   }
 
+  function initShipInventory() {
+    localStorage.setItem(
+      "shipInventory",
+      JSON.stringify(Gameboard().getShipInventory())
+    );
+  }
+
+  if (localStorage.getItem("shipInventory") === null) {
+    initShipInventory();
+  }
+
   function changeRotation() {
     if (localStorage.getItem("rotate") === "false") {
       localStorage.setItem("rotate", true);
@@ -308,7 +319,45 @@ const Storage = () => {
     }
   }
 
-  return { changeTurn, changeRotation, initRotation };
+  function storeShip(arrCoords) {
+    if (arrCoords.length === 4) {
+      localStorage.setItem("quads", JSON.stringify(arrCoords));
+    } else if (arrCoords.length === 3) {
+      localStorage.setItem("triplets", JSON.stringify(arrCoords));
+    } else if (arrCoords.length === 2) {
+      localStorage.setItem("couples", JSON.stringify(arrCoords));
+    } else if (arrCoords.length === 1) {
+      localStorage.setItem("singles", JSON.stringify(arrCoords));
+    }
+  }
+
+  function getNextShip() {
+    const inv = JSON.parse(localStorage.getItem("shipInventory"));
+    const next = inv.shift();
+    localStorage.setItem("shipInventory", JSON.stringify(inv));
+    return next;
+  }
+
+  function getCurrentShip() {
+    return JSON.parse(localStorage.getItem("shipInventory"));
+  }
+
+  function resetShips() {
+    localStorage.setItem(
+      "shipInventory",
+      JSON.stringify(Gameboard().getShipInventory())
+    );
+  }
+
+  return {
+    changeTurn,
+    changeRotation,
+    initRotation,
+    storeShip,
+    getNextShip,
+    getCurrentShip,
+    resetShips,
+  };
 };
 
 export { Ship, Gameboard, Player, Storage };
