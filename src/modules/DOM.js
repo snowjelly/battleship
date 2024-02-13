@@ -110,8 +110,9 @@ function getShipPlacementCoords(shipGhost) {
   Storage().storeShip(shipArr);
 }
 
-function addCellEventListeners(cell, cellsArr, rotate = false) {
+function addCellEventListeners(cell, cellsArr) {
   cell.addEventListener("mouseover", (e) => {
+    const rotate = Storage().getRotation();
     if (rotate) {
       hoverHighlightPlacement(e, cellsArr, rotate);
     } else {
@@ -176,7 +177,6 @@ function addRotateEventListener() {
     .children[0];
   inv.addEventListener("click", () => {
     Storage().changeRotation();
-    renderGameBoard1(JSON.parse(localStorage.getItem("rotate")));
   });
 }
 

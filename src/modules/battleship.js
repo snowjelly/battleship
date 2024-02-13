@@ -349,6 +349,10 @@ const Storage = () => {
     );
   }
 
+  function getRotation() {
+    return JSON.parse(localStorage.getItem("rotate"));
+  }
+
   return {
     changeTurn,
     changeRotation,
@@ -357,6 +361,7 @@ const Storage = () => {
     getNextShip,
     getCurrentShip,
     resetShips,
+    getRotation,
   };
 };
 
