@@ -3,8 +3,6 @@ import { Player, Storage } from "./battleship";
 const Game = (player1Name, player2Name) => {
   const player1 = Player(player1Name, 1);
   const player2 = Player(player2Name, 2);
-  player1.board.placeShipsRandomly();
-  player2.board.placeShipsRandomly();
 
   localStorage.setItem("turn", "p1");
 

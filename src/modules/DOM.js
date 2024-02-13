@@ -66,7 +66,10 @@ function hoverHighlightPlacement(e, cellsArr, rotate = false) {
   const curShipLength = Storage().getCurrentShip();
   if (rotate) {
     while (cellsArr.length) {
-      cellsArr.shift().classList.remove(className);
+      const cell = cellsArr.shift();
+      if (!cell.classList.contains("placed")) {
+        cell.classList.remove(className);
+      }
     }
     for (let i = 0; i < curShipLength; i += 1) {
       const adjacentCell = document.querySelector(
@@ -80,7 +83,10 @@ function hoverHighlightPlacement(e, cellsArr, rotate = false) {
     }
   } else {
     while (cellsArr.length) {
-      cellsArr.shift().classList.remove(className);
+      const cell = cellsArr.shift();
+      if (!cell.classList.contains("placed")) {
+        cell.classList.remove(className);
+      }
     }
     for (let i = 0; i < curShipLength; i += 1) {
       const adjacentCell = document.querySelector(
@@ -99,6 +105,7 @@ function getShipPlacementCoords(shipGhost) {
   const shipArr = [];
   for (let i = 0; i < shipGhost.length; i += 1) {
     shipArr.push([shipGhost[i].dataset.x, shipGhost[i].dataset.y]);
+    shipGhost[i].classList.add("placed");
   }
   Storage().storeShip(shipArr);
 }
@@ -112,24 +119,37 @@ function addCellEventListeners(cell, cellsArr, rotate = false) {
     }
   });
   cell.addEventListener("click", (e) => {
-    const nextShip = Storage().getNextShip();
-    if (nextShip === 4) {
-      const shipGhost = document.querySelectorAll(".quadruple");
+    if (e.target.classList.contains("placed")) return;
+    const curShipLength = Storage().getCurrentShip();
+    if (curShipLength === 4) {
+      const shipGhost = Array.from(
+        document.querySelectorAll(".quadruple")
+      ).filter((el) => !el.classList.contains("placed"));
+      if (shipGhost.length !== 4) return;
       getShipPlacementCoords(shipGhost);
     }
-    if (nextShip === 3) {
-      const shipGhost = document.querySelectorAll(".triple");
+    if (curShipLength === 3) {
+      const shipGhost = Array.from(document.querySelectorAll(".triple")).filter(
+        (el) => !el.classList.contains("placed")
+      );
+      if (shipGhost.length !== 3) return;
       getShipPlacementCoords(shipGhost);
     }
-    if (nextShip === 2) {
-      const shipGhost = document.querySelectorAll(".double");
+    if (curShipLength === 2) {
+      const shipGhost = Array.from(document.querySelectorAll(".double")).filter(
+        (el) => !el.classList.contains("placed")
+      );
+      if (shipGhost.length !== 2) return;
       getShipPlacementCoords(shipGhost);
     }
-    if (nextShip === 1) {
-      const shipGhost = document.querySelectorAll(".single");
+    if (curShipLength === 1) {
+      const shipGhost = Array.from(document.querySelectorAll(".single")).filter(
+        (el) => !el.classList.contains("placed")
+      );
+      if (shipGhost.length !== 1) return;
       getShipPlacementCoords(shipGhost);
     }
-    console.log(e.target);
+    Storage().getNextShip();
   });
 }
 
