@@ -43,6 +43,18 @@ function renderPlayer1Name() {
   return html;
 }
 
+function renderPlayer2Name() {
+  let turn = "";
+  if (localStorage.getItem("turn") === "p2") turn = "turn";
+  const html = `
+      <div class="player-names">
+        <div class="player2-name name silly-font ${turn}">
+          ${localStorage.getItem("player2Name")}
+        </div>
+        `;
+  return html;
+}
+
 function getClassName() {
   const currShip = Storage().getCurrentShip();
   if (currShip === 4) {
@@ -151,6 +163,13 @@ function addCellEventListeners(cell, cellsArr) {
       getShipPlacementCoords(shipGhost);
     }
     Storage().getNextShip();
+    if (Storage().getShipInventory().length === 0) {
+      if (Storage().getTurn() === "p2") {
+        renderGameBoards();
+      } else {
+        renderGameBoard2();
+      }
+    }
   });
 }
 
@@ -173,8 +192,6 @@ function tagCells(table, cellsArr, rotate = false) {
 }
 function addRotateEventListener() {
   const inv = document.querySelector(".ship-inventory");
-  const p1Table = document.querySelector(".player1-board-container")
-    .children[0];
   inv.addEventListener("click", () => {
     Storage().changeRotation();
   });
@@ -215,6 +232,34 @@ function renderGameBoard1(rotate = false) {
     tagCells(p1Table, cells, rotate);
   } else {
     tagCells(p1Table, cells);
+  }
+}
+
+function renderGameBoard2(rotate = false) {
+  Storage().resetShips();
+  const game = Game(
+    localStorage.getItem("player1Name"),
+    localStorage.getItem("player2Name")
+  );
+  Storage().changeTurn();
+  const main = document.querySelector("main");
+  main.innerHTML = `
+      <div class="container fade-in"></div>`;
+  const container = document.querySelector(".container");
+
+  container.insertAdjacentHTML("beforeend", renderPlayer2Name());
+  container.insertAdjacentHTML("beforeend", renderBoard2());
+  renderShipInventory();
+
+  const p2Table = document.querySelector(".player2-board-container")
+    .children[0];
+
+  const cells = [];
+
+  if (rotate) {
+    tagCells(p2Table, cells, rotate);
+  } else {
+    tagCells(p2Table, cells);
   }
 }
 

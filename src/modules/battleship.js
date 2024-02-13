@@ -292,6 +292,10 @@ const Storage = () => {
     }
   }
 
+  function getTurn() {
+    return localStorage.getItem("turn");
+  }
+
   function initRotation() {
     localStorage.setItem("rotate", false);
   }
@@ -342,6 +346,10 @@ const Storage = () => {
     return JSON.parse(localStorage.getItem("shipInventory"))[0];
   }
 
+  function getShipInventory() {
+    return JSON.parse(localStorage.getItem("shipInventory"));
+  }
+
   function resetShips() {
     localStorage.setItem(
       "shipInventory",
@@ -362,6 +370,8 @@ const Storage = () => {
     getCurrentShip,
     resetShips,
     getRotation,
+    getShipInventory,
+    getTurn,
   };
 };
 
