@@ -43,13 +43,32 @@ function renderPlayer1Name() {
   return html;
 }
 
+function getClassName() {
+  const currShip = Storage().getCurrentShip();
+  if (currShip === 4) {
+    return "quadruple";
+  }
+  if (currShip === 3) {
+    return "triple";
+  }
+  if (currShip === 2) {
+    return "double";
+  }
+  if (currShip === 1) {
+    return "single";
+  }
+  return null;
+}
+
 function hoverHighlightPlacement(e, cellsArr, rotate = false) {
   if (cellsArr === null) return;
+  const className = getClassName();
+  const curShipLength = Storage().getCurrentShip();
   if (rotate) {
     while (cellsArr.length) {
-      cellsArr.shift().classList.remove("quadruple");
+      cellsArr.shift().classList.remove(className);
     }
-    for (let i = 0; i < 4; i += 1) {
+    for (let i = 0; i < curShipLength; i += 1) {
       const adjacentCell = document.querySelector(
         `.cell[data-x="${e.target.dataset.x}"][data-y="${
           Number(e.target.dataset.y) + i
@@ -57,13 +76,13 @@ function hoverHighlightPlacement(e, cellsArr, rotate = false) {
       );
       if (adjacentCell === null) return;
       cellsArr.push(adjacentCell);
-      adjacentCell.classList.add("quadruple");
+      adjacentCell.classList.add(className);
     }
   } else {
     while (cellsArr.length) {
-      cellsArr.shift().classList.remove("quadruple");
+      cellsArr.shift().classList.remove(className);
     }
-    for (let i = 0; i < 4; i += 1) {
+    for (let i = 0; i < curShipLength; i += 1) {
       const adjacentCell = document.querySelector(
         `.cell[data-x="${Number(e.target.dataset.x) + i}"][data-y="${
           e.target.dataset.y
@@ -71,7 +90,7 @@ function hoverHighlightPlacement(e, cellsArr, rotate = false) {
       );
       if (adjacentCell === null) return;
       cellsArr.push(adjacentCell);
-      adjacentCell.classList.add("quadruple");
+      adjacentCell.classList.add(className);
     }
   }
 }

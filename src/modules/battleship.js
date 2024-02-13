@@ -339,7 +339,7 @@ const Storage = () => {
   }
 
   function getCurrentShip() {
-    return JSON.parse(localStorage.getItem("shipInventory"));
+    return JSON.parse(localStorage.getItem("shipInventory"))[0];
   }
 
   function resetShips() {
