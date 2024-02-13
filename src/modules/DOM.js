@@ -76,6 +76,16 @@ function hoverHighlightPlacement(e, cellsArr, rotate = false) {
   }
 }
 
+function storeShipPlacement(e, shipGhost) {
+  const arrCoords = [];
+  let targ = e.target;
+  for (let i = 0; i < shipGhost.length; i += 1) {
+    arrCoords.push(targ);
+    targ = targ.nextElementSibling;
+  }
+  return arrCoords;
+}
+
 function addCellEventListeners(cell, cellsArr, rotate = false) {
   cell.addEventListener("mouseover", (e) => {
     if (rotate) {
@@ -83,6 +93,12 @@ function addCellEventListeners(cell, cellsArr, rotate = false) {
     } else {
       hoverHighlightPlacement(e, cellsArr);
     }
+  });
+  cell.addEventListener("click", (e) => {
+    const shipGhost = document.querySelectorAll(".quadruple");
+    if (shipGhost.length < 4) return;
+    console.log(e.target);
+    storeShipPlacement(e, shipGhost);
   });
 }
 
