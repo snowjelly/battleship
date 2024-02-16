@@ -4,6 +4,7 @@ import { Storage, Gameboard } from "./battleship";
 
 function removeWelcomeScreen() {
   document.querySelector(".welcome").remove();
+  localStorage.removeItem("winner");
 }
 
 function waitForAnimationEnd(animationClassName, querySelector, cb) {
@@ -302,12 +303,18 @@ function renderGameBoards() {
     .children[0];
   const p2Table = document.querySelector(".player2-board-container")
     .children[0];
-
+  const players = Storage().getPlayers();
+  const p1 = players.p1;
+  const p2 = players.p2;
+  const game = Game(p1, p2);
   function addCellEventListeners(cell) {
     cell.addEventListener("click", (e) => {
-      // if (game.next(e, styleAttackResults) === "gameover") {
-      //   renderGameEnd();
-      // }
+      if (
+        game.next(e, styleAttackResults) === "gameover" ||
+        localStorage.getItem("winner") !== null
+      ) {
+        renderGameEnd();
+      }
     });
   }
 
@@ -355,9 +362,6 @@ function renderGameBoards() {
     }
   }
   function init() {
-    const players = Storage().getPlayers();
-    const p1 = players.p1;
-    const p2 = players.p2;
     const player1Board = p1.board.getBoard();
     const player2Board = p2.board.getBoard();
 

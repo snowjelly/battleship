@@ -258,24 +258,29 @@ const Gameboard = () => {
       p2Text = "P2";
     }
     const singles = JSON.parse(localStorage.getItem(`singles${p2Text}`));
-    const ship = Ship(1);
     singles.flat(1).forEach((coord) => {
-      placeShip(ship, [Number(coord[0]), Number(coord[1])]);
+      placeShip(Ship(1), [Number(coord[0]), Number(coord[1])]);
     });
     const couples = JSON.parse(localStorage.getItem(`couples${p2Text}`));
-    const ship2 = Ship(2);
-    couples.flat(1).forEach((coord) => {
-      placeShip(ship2, [Number(coord[0]), Number(coord[1])]);
+    couples.forEach((couple) => {
+      const ship2 = Ship(2);
+      couple.forEach((coord) => {
+        placeShip(ship2, [Number(coord[0]), Number(coord[1])]);
+      });
     });
     const triplets = JSON.parse(localStorage.getItem(`triplets${p2Text}`));
-    const ship3 = Ship(3);
-    triplets.flat(1).forEach((coord) => {
-      placeShip(ship3, [Number(coord[0]), Number(coord[1])]);
+    triplets.forEach((triplet) => {
+      const ship3 = Ship(3);
+      triplet.forEach((coord) => {
+        placeShip(ship3, [Number(coord[0]), Number(coord[1])]);
+      });
     });
     const quads = JSON.parse(localStorage.getItem(`quads${p2Text}`));
-    const ship4 = Ship(4);
-    quads.flat(1).forEach((coord) => {
-      placeShip(ship4, [Number(coord[0]), Number(coord[1])]);
+    quads.forEach((quad) => {
+      const ship4 = Ship(4);
+      quad.forEach((coord) => {
+        placeShip(ship4, [Number(coord[0]), Number(coord[1])]);
+      });
     });
   }
 

@@ -1,9 +1,6 @@
 import { Player, Storage } from "./battleship";
 
-const Game = (player1Name, player2Name) => {
-  const player1 = Player(player1Name, 1);
-  const player2 = Player(player2Name, 2);
-
+const Game = (p1, p2) => {
   localStorage.setItem("turn", "p1");
 
   function next(e, styleResults) {
@@ -13,10 +10,11 @@ const Game = (player1Name, player2Name) => {
       !e.target.classList.contains("miss") &&
       !e.target.classList.contains("hit")
     ) {
+      console.log(p2.board.shipsSunk());
       const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
-      styleResults(player1.attack(player2, coords), e);
-      if (player2.board.shipsSunk().sunk) {
-        localStorage.setItem("winner", player1.name);
+      styleResults(p1.attack(p2, coords), e);
+      if (p2.board.shipsSunk().sunk) {
+        localStorage.setItem("winner", p1.name);
         return "gameover";
       }
       Storage().changeTurn();
@@ -27,10 +25,11 @@ const Game = (player1Name, player2Name) => {
       !e.target.classList.contains("miss") &&
       !e.target.classList.contains("hit")
     ) {
+      console.log(p1.board.shipsSunk());
       const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
-      styleResults(player2.attack(player1, coords), e);
-      if (player1.board.shipsSunk().sunk) {
-        localStorage.setItem("winner", player2.name);
+      styleResults(p2.attack(p1, coords), e);
+      if (p1.board.shipsSunk().sunk) {
+        localStorage.setItem("winner", p2.name);
         return "gameover";
       }
       Storage().changeTurn();
