@@ -315,6 +315,25 @@ const Storage = () => {
     initShipInventory();
   }
 
+  function initShipCoords() {
+    localStorage.setItem("quads", JSON.stringify([]));
+    localStorage.setItem("quadsP2", JSON.stringify([]));
+    localStorage.setItem("triplets", JSON.stringify([]));
+    localStorage.setItem("tripletsP2", JSON.stringify([]));
+    localStorage.setItem("couples", JSON.stringify([]));
+    localStorage.setItem("couplesP2", JSON.stringify([]));
+    localStorage.setItem("singles", JSON.stringify([]));
+    localStorage.setItem("singlesP2", JSON.stringify([]));
+  }
+
+  if (localStorage.getItem("quads") === null) {
+    initShipCoords();
+  }
+
+  function getShipCoords(type) {
+    return JSON.parse(localStorage.getItem(type));
+  }
+
   function changeRotation() {
     if (localStorage.getItem("rotate") === "false") {
       localStorage.setItem("rotate", true);
@@ -323,15 +342,41 @@ const Storage = () => {
     }
   }
 
-  function storeShip(arrCoords) {
-    if (arrCoords.length === 4) {
-      localStorage.setItem("quads", JSON.stringify(arrCoords));
+  function storeShip(arrCoords, p2 = false) {
+    if (p2) {
+      if (arrCoords.length === 4) {
+        const quadsP2 = getShipCoords("quadsP2");
+        quadsP2.push(arrCoords);
+        localStorage.setItem("quadsP2", JSON.stringify(quadsP2));
+      } else if (arrCoords.length === 3) {
+        const tripletsP2 = getShipCoords("tripletsP2");
+        tripletsP2.push(arrCoords);
+        localStorage.setItem("tripletsP2", JSON.stringify(tripletsP2));
+      } else if (arrCoords.length === 2) {
+        const couplesP2 = getShipCoords("couplesP2");
+        couplesP2.push(arrCoords);
+        localStorage.setItem("couplesP2", JSON.stringify(couplesP2));
+      } else if (arrCoords.length === 1) {
+        const singlesP2 = getShipCoords("singlesP2");
+        singlesP2.push(arrCoords);
+        localStorage.setItem("singlesP2", JSON.stringify(singlesP2));
+      }
+    } else if (arrCoords.length === 4) {
+      const quads = getShipCoords("quads");
+      quads.push(arrCoords);
+      localStorage.setItem("quads", JSON.stringify(quads));
     } else if (arrCoords.length === 3) {
-      localStorage.setItem("triplets", JSON.stringify(arrCoords));
+      const triplets = getShipCoords("triplets");
+      triplets.push(arrCoords);
+      localStorage.setItem("triplets", JSON.stringify(triplets));
     } else if (arrCoords.length === 2) {
-      localStorage.setItem("couples", JSON.stringify(arrCoords));
+      const couples = getShipCoords("couples");
+      couples.push(arrCoords);
+      localStorage.setItem("couples", JSON.stringify(couples));
     } else if (arrCoords.length === 1) {
-      localStorage.setItem("singles", JSON.stringify(arrCoords));
+      const singles = getShipCoords("singles");
+      singles.push(arrCoords);
+      localStorage.setItem("singles", JSON.stringify(singles));
     }
   }
 
@@ -372,6 +417,7 @@ const Storage = () => {
     getRotation,
     getShipInventory,
     getTurn,
+    initShipCoords,
   };
 };
 

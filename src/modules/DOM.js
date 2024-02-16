@@ -115,11 +115,15 @@ function hoverHighlightPlacement(e, cellsArr, rotate = false) {
 
 function getShipPlacementCoords(shipGhost) {
   const shipArr = [];
+  let p2 = false;
   for (let i = 0; i < shipGhost.length; i += 1) {
+    if (shipGhost[i].classList.contains("p2")) {
+      p2 = true;
+    }
     shipArr.push([shipGhost[i].dataset.x, shipGhost[i].dataset.y]);
     shipGhost[i].classList.add("placed");
   }
-  Storage().storeShip(shipArr);
+  Storage().storeShip(shipArr, p2);
 }
 
 function addCellEventListeners(cell, cellsArr) {
@@ -504,6 +508,8 @@ function renderGameEnd() {
 }
 
 addOpponentSelectEventListeners();
+
+Storage().initShipCoords();
 
 removeWelcomeScreen();
 renderGameBoards();
