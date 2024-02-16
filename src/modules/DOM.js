@@ -268,12 +268,6 @@ function renderGameBoard2(rotate = false) {
 }
 
 function renderGameBoards() {
-  const game = Game(
-    localStorage.getItem("player1Name"),
-    localStorage.getItem("player2Name")
-  );
-  const { players } = game;
-
   function storageSetTurn(p) {
     localStorage.setItem("turn", p);
   }
@@ -311,9 +305,9 @@ function renderGameBoards() {
 
   function addCellEventListeners(cell) {
     cell.addEventListener("click", (e) => {
-      if (game.next(e, styleAttackResults) === "gameover") {
-        renderGameEnd();
-      }
+      // if (game.next(e, styleAttackResults) === "gameover") {
+      //   renderGameEnd();
+      // }
     });
   }
 
@@ -361,11 +355,17 @@ function renderGameBoards() {
     }
   }
   function init() {
+    const players = Storage().getPlayers();
+    const p1 = players.p1;
+    const p2 = players.p2;
+    const player1Board = p1.board.getBoard();
+    const player2Board = p2.board.getBoard();
+
+    p1.board.placeShips();
+    p2.board.placeShips(true);
+
     tagCells(p1Table);
     tagCells(p2Table);
-
-    const player1Board = players.player1.board.getBoard();
-    const player2Board = players.player2.board.getBoard();
 
     renderShips(player1Board);
     renderShips(player1Board);
@@ -377,6 +377,7 @@ function renderGameBoards() {
     renderShips(player2Board, true);
     renderShips(player2Board, true);
   }
+  init();
 }
 
 function renderWelcomeScreen() {
@@ -511,6 +512,7 @@ addOpponentSelectEventListeners();
 
 Storage().initShipCoords();
 
-removeWelcomeScreen();
+/* removeWelcomeScreen();
 renderGameBoards();
 renderGameEnd();
+ */

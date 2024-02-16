@@ -38,7 +38,7 @@ const Game = (player1Name, player2Name) => {
     return null;
   }
 
-  return { players: { player1, player2 }, next };
+  return { next };
 };
 
 export default Game;

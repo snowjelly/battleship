@@ -252,6 +252,33 @@ const Gameboard = () => {
     return [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
   }
 
+  function placeShips(p2 = false) {
+    let p2Text = "";
+    if (p2) {
+      p2Text = "P2";
+    }
+    const singles = JSON.parse(localStorage.getItem(`singles${p2Text}`));
+    const ship = Ship(1);
+    singles.flat(1).forEach((coord) => {
+      placeShip(ship, [Number(coord[0]), Number(coord[1])]);
+    });
+    const couples = JSON.parse(localStorage.getItem(`couples${p2Text}`));
+    const ship2 = Ship(2);
+    couples.flat(1).forEach((coord) => {
+      placeShip(ship2, [Number(coord[0]), Number(coord[1])]);
+    });
+    const triplets = JSON.parse(localStorage.getItem(`triplets${p2Text}`));
+    const ship3 = Ship(3);
+    triplets.flat(1).forEach((coord) => {
+      placeShip(ship3, [Number(coord[0]), Number(coord[1])]);
+    });
+    const quads = JSON.parse(localStorage.getItem(`quads${p2Text}`));
+    const ship4 = Ship(4);
+    quads.flat(1).forEach((coord) => {
+      placeShip(ship4, [Number(coord[0]), Number(coord[1])]);
+    });
+  }
+
   return {
     placeShip,
     receiveAttack,
@@ -261,6 +288,7 @@ const Gameboard = () => {
     getRandomCoordinate,
     getBoard,
     getShipInventory,
+    placeShips,
   };
 };
 
@@ -342,6 +370,12 @@ const Storage = () => {
     }
   }
 
+  function getPlayers() {
+    const p1 = Player(localStorage.getItem("player1Name"));
+    const p2 = Player(localStorage.getItem("player2Name"));
+    return { p1, p2 };
+  }
+
   function storeShip(arrCoords, p2 = false) {
     if (p2) {
       if (arrCoords.length === 4) {
@@ -418,6 +452,7 @@ const Storage = () => {
     getShipInventory,
     getTurn,
     initShipCoords,
+    getPlayers,
   };
 };
 
