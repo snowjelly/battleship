@@ -1,4 +1,10 @@
 import { renderBoard1, renderBoard2 } from "./gameBoards";
+import {
+  renderPlayer1Name,
+  renderPlayer2Name,
+  renderWelcomeScreen,
+  renderNameSelection,
+} from "./UI";
 import Game from "./gameloop";
 import { Storage, Gameboard } from "./battleship";
 
@@ -25,38 +31,13 @@ function changeNameColorOnTurn() {
   }
 }
 
-function styleAttackResults(result, e) {
+function styleAttackResults(result) {
   if (result.illegal) return;
-  if (result.miss) e.target.classList.add("miss");
-  if (result.hit) e.target.classList.add("hit");
   changeNameColorOnTurn();
+  return result;
 }
 
-function renderPlayer1Name() {
-  let turn = "";
-  if (localStorage.getItem("turn") === "p1") turn = "turn";
-  const html = `
-      <div class="player-names">
-        <div class="player1-name name silly-font ${turn}">
-          ${localStorage.getItem("player1Name")}
-        </div>
-        `;
-  return html;
-}
-
-function renderPlayer2Name() {
-  let turn = "";
-  if (localStorage.getItem("turn") === "p2") turn = "turn";
-  const html = `
-      <div class="player-names">
-        <div class="player2-name name silly-font ${turn}">
-          ${localStorage.getItem("player2Name")}
-        </div>
-        `;
-  return html;
-}
-
-function getClassName() {
+function getClassNameOfTheCurrentShip() {
   const currShip = Storage().getCurrentShip();
   if (currShip === 4) {
     return "quadruple";
@@ -75,42 +56,30 @@ function getClassName() {
 
 function hoverHighlightPlacement(e, cellsArr, rotate = false) {
   if (cellsArr === null) return;
-  const className = getClassName();
+  const className = getClassNameOfTheCurrentShip();
   const curShipLength = Storage().getCurrentShip();
-  if (rotate) {
-    while (cellsArr.length) {
-      const cell = cellsArr.shift();
-      if (!cell.classList.contains("placed")) {
-        cell.classList.remove(className);
-      }
+  let cellX;
+  let cellY;
+  while (cellsArr.length) {
+    const cell = cellsArr.shift();
+    if (!cell.classList.contains("placed")) {
+      cell.classList.remove(className);
     }
-    for (let i = 0; i < curShipLength; i += 1) {
-      const adjacentCell = document.querySelector(
-        `.cell[data-x="${e.target.dataset.x}"][data-y="${
-          Number(e.target.dataset.y) + i
-        }"]`
-      );
-      if (adjacentCell === null) return;
-      cellsArr.push(adjacentCell);
-      adjacentCell.classList.add(className);
+  }
+  for (let i = 0; i < curShipLength; i += 1) {
+    if (rotate) {
+      cellX = e.target.dataset.x;
+      cellY = Number(e.target.dataset.y) + i;
+    } else {
+      cellX = Number(e.target.dataset.x) + i;
+      cellY = e.target.dataset.y;
     }
-  } else {
-    while (cellsArr.length) {
-      const cell = cellsArr.shift();
-      if (!cell.classList.contains("placed")) {
-        cell.classList.remove(className);
-      }
-    }
-    for (let i = 0; i < curShipLength; i += 1) {
-      const adjacentCell = document.querySelector(
-        `.cell[data-x="${Number(e.target.dataset.x) + i}"][data-y="${
-          e.target.dataset.y
-        }"]`
-      );
-      if (adjacentCell === null) return;
-      cellsArr.push(adjacentCell);
-      adjacentCell.classList.add(className);
-    }
+    const adjacentCell = document.querySelector(
+      `.cell[data-x="${cellX}"][data-y="${cellY}"]`
+    );
+    if (adjacentCell === null) return;
+    cellsArr.push(adjacentCell);
+    adjacentCell.classList.add(className);
   }
 }
 
@@ -139,34 +108,14 @@ function addCellEventListeners(cell, cellsArr) {
   cell.addEventListener("click", (e) => {
     if (e.target.classList.contains("placed")) return;
     const curShipLength = Storage().getCurrentShip();
-    if (curShipLength === 4) {
-      const shipGhost = Array.from(
-        document.querySelectorAll(".quadruple")
-      ).filter((el) => !el.classList.contains("placed"));
-      if (shipGhost.length !== 4) return;
-      getShipPlacementCoords(shipGhost);
-    }
-    if (curShipLength === 3) {
-      const shipGhost = Array.from(document.querySelectorAll(".triple")).filter(
-        (el) => !el.classList.contains("placed")
-      );
-      if (shipGhost.length !== 3) return;
-      getShipPlacementCoords(shipGhost);
-    }
-    if (curShipLength === 2) {
-      const shipGhost = Array.from(document.querySelectorAll(".double")).filter(
-        (el) => !el.classList.contains("placed")
-      );
-      if (shipGhost.length !== 2) return;
-      getShipPlacementCoords(shipGhost);
-    }
-    if (curShipLength === 1) {
-      const shipGhost = Array.from(document.querySelectorAll(".single")).filter(
-        (el) => !el.classList.contains("placed")
-      );
-      if (shipGhost.length !== 1) return;
-      getShipPlacementCoords(shipGhost);
-    }
+    const shipType = getClassNameOfTheCurrentShip();
+
+    const shipGhost = Array.from(
+      document.querySelectorAll(`.${shipType}`)
+    ).filter((el) => !el.classList.contains("placed"));
+    if (shipGhost.length !== curShipLength) return;
+    getShipPlacementCoords(shipGhost);
+
     Storage().getNextShip();
     if (Storage().getShipInventory().length === 0) {
       if (Storage().getTurn() === "p2") {
@@ -178,7 +127,7 @@ function addCellEventListeners(cell, cellsArr) {
   });
 }
 
-function tagCells(table, cellsArr, rotate = false) {
+function tagCells(table, cellsArr) {
   for (let i = 1; i < table.rows.length; i += 1) {
     for (let k = 1; k < table.rows[i].cells.length; k += 1) {
       const cell = table.rows[i].cells[k];
@@ -187,14 +136,11 @@ function tagCells(table, cellsArr, rotate = false) {
       if (table.parentElement.classList.contains("player2-board-container")) {
         cell.classList.add("p2");
       }
-      if (rotate) {
-        addCellEventListeners(cell, cellsArr, rotate);
-      } else {
-        addCellEventListeners(cell, cellsArr);
-      }
+      addCellEventListeners(cell, cellsArr);
     }
   }
 }
+
 function addRotateEventListener() {
   const inv = document.querySelector(".ship-inventory");
   inv.addEventListener("click", () => {
@@ -202,23 +148,14 @@ function addRotateEventListener() {
   });
 }
 
-function renderShipInventory() {
-  const html = `
-    <div class="ship-inventory">
-      <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 -960 960 960" width="50"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
-    </div>
-  `;
-
-  document.querySelector(".player-names").insertAdjacentHTML("afterend", html);
-  addRotateEventListener();
-}
-
 function renderGameBoard1(rotate = false) {
   Storage().resetShips();
-  const game = Game(
+  /* const game = Game(
     localStorage.getItem("player1Name"),
     localStorage.getItem("player2Name")
   );
+  */
+
   const main = document.querySelector("main");
   main.innerHTML = `
       <div class="container fade-in"></div>`;
@@ -233,19 +170,16 @@ function renderGameBoard1(rotate = false) {
 
   const cells = [];
 
-  if (rotate) {
-    tagCells(p1Table, cells, rotate);
-  } else {
-    tagCells(p1Table, cells);
-  }
+  tagCells(p1Table, cells);
 }
 
 function renderGameBoard2(rotate = false) {
   Storage().resetShips();
-  const game = Game(
+  /* const game = Game(
     localStorage.getItem("player1Name"),
     localStorage.getItem("player2Name")
   );
+  */
   Storage().changeTurn();
   const main = document.querySelector("main");
   main.innerHTML = `
@@ -268,29 +202,47 @@ function renderGameBoard2(rotate = false) {
   }
 }
 
-function renderGameBoards() {
-  function storageSetTurn(p) {
-    localStorage.setItem("turn", p);
+function styleAttacks() {
+  const attacks = Storage().getAttacks();
+  const turn = Storage().getTurn();
+
+  if (turn === "p1") {
+    for (let i = 0; i < attacks.p1.length; i += 1) {
+      const cellElement = document.querySelector(
+        `.p2[data-y="${attacks.p1[i].coords[1]}"][data-x="${attacks.p1[i].coords[0]}`
+      );
+      if (attacks.p1[i].miss) {
+        cellElement.classList.add("miss");
+      }
+      if (attacks.p1[i].hit) {
+        cellElement.classList.add("hit");
+      }
+    }
   }
+  if (turn === "p2") {
+    for (let i = 0; i < attacks.p2.length; i += 1) {
+      const cellElement = document.querySelector(
+        `[data-y="${attacks.p2[i].coords[1]}"][data-x="${attacks.p2[i].coords[0]}`
+      );
+      if (attacks.p2[i].miss) {
+        cellElement.classList.add("miss");
+      }
+      if (attacks.p2[i].hit) {
+        cellElement.classList.add("hit");
+      }
+    }
+  }
+}
 
-  storageSetTurn("p1");
+function unRenderShips() {
+  renderGameBoards(false);
+}
 
+function renderGameBoards(firstRun = true) {
   document.querySelector("main").innerHTML = `
       <div class="container fade-in"></div>`;
   let cpuText = "";
   if (localStorage.getItem("opponent") === "ai") cpuText = "(CPU)";
-
-  function renderPlayer2Name() {
-    let turn = "";
-    if (localStorage.getItem("turn") === "p2") turn = "turn";
-    const html = `
-        <div class="player2-name name silly-font ${turn}">
-          ${localStorage.getItem("player2Name")} ${cpuText}
-        </div>
-      </div>
-    `;
-    return html;
-  }
 
   const container = document.querySelector(".container");
 
@@ -361,45 +313,6 @@ function renderGameBoards() {
       }
     }
   }
-  function init() {
-    const player1Board = p1.board.getBoard();
-    const player2Board = p2.board.getBoard();
-
-    p1.board.placeShips();
-    p2.board.placeShips(true);
-
-    tagCells(p1Table);
-    tagCells(p2Table);
-
-    renderShips(player1Board);
-    renderShips(player1Board);
-    renderShips(player1Board);
-    renderShips(player1Board);
-
-    renderShips(player2Board, true);
-    renderShips(player2Board, true);
-    renderShips(player2Board, true);
-    renderShips(player2Board, true);
-  }
-  init();
-}
-
-function renderWelcomeScreen() {
-  document.querySelector("main").innerHTML = `
-  <div class="welcome fade-in">
-        <h1>Welcome to Battleship</h1>
-        <h2 class="question">Face an A.I or human opponent?</h2>
-        <div class="select-opponent-btns">
-          <img src="./assets/ai.jpg" alt="ai" class="opponent-btn" id="ai" />
-          <img
-            src="./assets/human.jpg"
-            alt="human"
-            class="opponent-btn"
-            id="human"
-          />
-        </div>
-      </div>
-  `;
 }
 
 function removeNameSelectScreen() {
@@ -427,37 +340,6 @@ function addNameSubmitBtnEventListeners() {
   });
 }
 
-function renderNameSelection(ai) {
-  let player1Name;
-  let player2Name;
-  if (ai) {
-    player1Name = `Enter your name:`;
-    player2Name = `Enter the name for your A.I challenger:`;
-  } else {
-    player1Name = `Player 1: Enter your name:`;
-    player2Name = `Player 2: Enter your name:`;
-  }
-  const html = `
-    <div class="name-selection fade-in">
-      <form class="form-name">
-        <div class="form-name-el">
-          <label for="player1"> ${player1Name} </label>
-          <input type="text" name="player1" id="player1" required/>
-        </div>
-        <div class="form-name-el">
-          <label for="player2"> ${player2Name} </label>
-          <input type="text" name="player2" id="player2" required/>
-        </div>
-        <div class="submit-container">
-          <button class="silly-font" type="button">LET'S ROCK!</button>
-        </div>
-      </form>
-    </div>
-  `;
-  document.querySelector("main").innerHTML = html;
-  addNameSubmitBtnEventListeners();
-}
-
 function addOpponentSelectEventListeners() {
   const aiBtn = document.querySelector("#ai");
   const humanBtn = document.querySelector("#human");
@@ -467,6 +349,7 @@ function addOpponentSelectEventListeners() {
     waitForAnimationEnd("fade-out", ".welcome", removeWelcomeScreen);
     waitForAnimationEnd("fade-out", ".welcome", () => {
       renderNameSelection(true);
+      addNameSubmitBtnEventListeners();
     });
   });
 
@@ -474,6 +357,7 @@ function addOpponentSelectEventListeners() {
     localStorage.setItem("opponent", "human");
     waitForAnimationEnd("fade-out", ".welcome", removeWelcomeScreen);
     waitForAnimationEnd("fade-out", ".welcome", renderNameSelection);
+    addNameSubmitBtnEventListeners();
   });
 }
 
@@ -491,27 +375,6 @@ function addGameOverEventListeners() {
   });
 }
 
-function renderGameEnd() {
-  document.querySelector("main").innerHTML = "";
-  document.querySelector("main").insertAdjacentHTML(
-    "beforeend",
-    `
-    <div class="game-over-container">
-      <div class="game-over-content">
-        <h1>Game Over</h1>
-        <h2>${localStorage.getItem("winner")} wins!</h1>
-        <h2> Play again? </h2>
-        <div class="game-over-prompt">
-          <button type="button" class="retry-btn">Retry</button>
-          <button type="button" class="new-players-btn">New Players</button>
-        </div>
-      </div>
-    </div>
-  `
-  );
-  addGameOverEventListeners();
-}
-
 addOpponentSelectEventListeners();
 
 Storage().initShipCoords();
@@ -520,3 +383,4 @@ Storage().initShipCoords();
 renderGameBoards();
 renderGameEnd();
  */
+export { unRenderShips, styleAttacks };

@@ -226,25 +226,6 @@ const Gameboard = () => {
       placeShip(Ship(1), coord);
     });
 
-    // returnValue.doubles.forEach((doubleCoord) => {
-    //   const ship = Ship(2);
-    //   doubleCoord.forEach((singleCoord) => {
-    //     placeShip(ship, singleCoord);
-    //   });
-    // });
-
-    // returnValue.triples.forEach((tripleCoord) => {
-    //   const ship = Ship(3);
-    //   tripleCoord.forEach((singleCoord) => {
-    //     placeShip(ship, singleCoord);
-    //   });
-    // });
-
-    // const ship = Ship(4);
-    // returnValue.quads.forEach((coord) => {
-    //   placeShip(ship, coord);
-    // });
-
     return returnValue;
   }
 
@@ -329,6 +310,35 @@ const Storage = () => {
     return localStorage.getItem("turn");
   }
 
+  function initAttacks() {
+    localStorage.setItem("attacks", JSON.stringify({ p1: [], p2: [] }));
+  }
+
+  function getAttacks() {
+    let attacks = JSON.parse(localStorage.getItem("attacks"));
+    if (attacks === null) {
+      initAttacks();
+      attacks = JSON.parse(localStorage.getItem("attacks"));
+    }
+    return attacks;
+  }
+
+  function setAttacks(value) {
+    localStorage.setItem("attacks", JSON.stringify(value));
+  }
+
+  function storeAttack(attackResult) {
+    const turn = getTurn();
+    const attacks = getAttacks();
+    if (turn === "p1") {
+      attacks.p1.push(attackResult);
+    }
+    if (turn === "p2") {
+      attacks.p2.push(attackResult);
+    }
+    setAttacks(attacks);
+  }
+
   function initRotation() {
     localStorage.setItem("rotate", false);
   }
@@ -382,41 +392,32 @@ const Storage = () => {
   }
 
   function storeShip(arrCoords, p2 = false) {
-    if (p2) {
-      if (arrCoords.length === 4) {
-        const quadsP2 = getShipCoords("quadsP2");
-        quadsP2.push(arrCoords);
-        localStorage.setItem("quadsP2", JSON.stringify(quadsP2));
-      } else if (arrCoords.length === 3) {
-        const tripletsP2 = getShipCoords("tripletsP2");
-        tripletsP2.push(arrCoords);
-        localStorage.setItem("tripletsP2", JSON.stringify(tripletsP2));
-      } else if (arrCoords.length === 2) {
-        const couplesP2 = getShipCoords("couplesP2");
-        couplesP2.push(arrCoords);
-        localStorage.setItem("couplesP2", JSON.stringify(couplesP2));
-      } else if (arrCoords.length === 1) {
-        const singlesP2 = getShipCoords("singlesP2");
-        singlesP2.push(arrCoords);
-        localStorage.setItem("singlesP2", JSON.stringify(singlesP2));
+    function getShipType() {
+      let P2Str = "";
+      if (p2) {
+        P2Str = "P2";
       }
-    } else if (arrCoords.length === 4) {
-      const quads = getShipCoords("quads");
-      quads.push(arrCoords);
-      localStorage.setItem("quads", JSON.stringify(quads));
-    } else if (arrCoords.length === 3) {
-      const triplets = getShipCoords("triplets");
-      triplets.push(arrCoords);
-      localStorage.setItem("triplets", JSON.stringify(triplets));
-    } else if (arrCoords.length === 2) {
-      const couples = getShipCoords("couples");
-      couples.push(arrCoords);
-      localStorage.setItem("couples", JSON.stringify(couples));
-    } else if (arrCoords.length === 1) {
-      const singles = getShipCoords("singles");
-      singles.push(arrCoords);
-      localStorage.setItem("singles", JSON.stringify(singles));
+      if (arrCoords.length === 4) {
+        return `quads${P2Str}`;
+      }
+      if (arrCoords.length === 3) {
+        return `triplets${P2Str}`;
+      }
+      if (arrCoords.length === 2) {
+        return `couples${P2Str}`;
+      }
+      if (arrCoords.length === 1) {
+        return `singles${P2Str}`;
+      }
+      return null;
     }
+
+    const store = (() => {
+      const shipType = getShipType();
+      const shipArrCoordinates = getShipCoords(shipType);
+      shipArrCoordinates.push(arrCoords);
+      localStorage.setItem(shipType, JSON.stringify(shipArrCoordinates));
+    })();
   }
 
   function getNextShip() {
@@ -458,6 +459,9 @@ const Storage = () => {
     getTurn,
     initShipCoords,
     getPlayers,
+    storeAttack,
+    initAttacks,
+    getAttacks,
   };
 };
 

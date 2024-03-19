@@ -1,8 +1,7 @@
+import { unRenderShips, styleAttacks } from "./DOM";
 import { Player, Storage } from "./battleship";
 
 const Game = (p1, p2) => {
-  localStorage.setItem("turn", "p1");
-
   function next(e, styleResults) {
     if (
       localStorage.getItem("turn") === "p1" &&
@@ -12,11 +11,13 @@ const Game = (p1, p2) => {
     ) {
       console.log(p2.board.shipsSunk());
       const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
-      styleResults(p1.attack(p2, coords), e);
+      Storage().storeAttack(styleResults(p1.attack(p2, coords), e));
       if (p2.board.shipsSunk().sunk) {
         localStorage.setItem("winner", p1.name);
         return "gameover";
       }
+      // unRenderShips();
+      styleAttacks();
       Storage().changeTurn();
     }
     if (
@@ -27,11 +28,13 @@ const Game = (p1, p2) => {
     ) {
       console.log(p1.board.shipsSunk());
       const coords = [Number(e.target.dataset.x), Number(e.target.dataset.y)];
-      styleResults(p2.attack(p1, coords), e);
+      Storage().storeAttack(styleResults(p2.attack(p1, coords), e));
       if (p1.board.shipsSunk().sunk) {
         localStorage.setItem("winner", p2.name);
         return "gameover";
       }
+      // unRenderShips();
+      styleAttacks();
       Storage().changeTurn();
     }
     return null;
