@@ -10,16 +10,29 @@
   <body>
     <main>
       <div class="welcome fade-in">
-        <h1>Welcome to Battleship</h1>
-        <h2 class="question">Face an A.I or human opponent?</h2>
+        <div class="welcome-header pink-bubble">
+          <h1 class="bubble-font">Welcome to Battleship</h1>
+        </div>
+        <div class="opponent-prompt-container pink-bubble">
+          <h2 class="question bubble-font">Face an A.I or human opponent?</h2>
+        </div>
         <div class="select-opponent-btns">
-          <img src="./assets/ai.jpg" alt="ai" class="opponent-btn" id="ai" />
-          <img
-            src="./assets/human.jpg"
-            alt="human"
-            class="opponent-btn"
-            id="human"
-          />
+          <div class="robot-container pink-bubble btn-container">
+            <img
+              src="./assets/robot.png"
+              alt="ai"
+              class="opponent-btn"
+              id="ai"
+            />
+          </div>
+          <div class="human-container pink-bubble btn-container">
+            <img
+              src="./assets/human.png"
+              alt="human"
+              class="opponent-btn"
+              id="human"
+            />
+          </div>
         </div>
       </div>
     </main>

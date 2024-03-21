@@ -3,7 +3,7 @@ function renderPlayer1Name() {
   if (localStorage.getItem("turn") === "p1") turn = "turn";
   const html = `
       <div class="player-names">
-        <div class="player1-name name silly-font ${turn}">
+        <div class="player1-name name silly-font pink-bubble ${turn}">
           ${localStorage.getItem("player1Name")}
         </div>
         `;
@@ -47,22 +47,25 @@ function renderNameSelection(ai) {
     player1Name = `Enter your name:`;
     player2Name = `Enter the name for your A.I challenger:`;
   } else {
-    player1Name = `Player 1: Enter your name:`;
-    player2Name = `Player 2: Enter your name:`;
+    player1Name = `Player 1`;
+    player2Name = `Player 2`;
   }
   const html = `
     <div class="name-selection fade-in">
-      <form class="form-name">
+      <form class="form-name pink-bubble">
+        <div class="name-prompt">
+          <h1>Enter Name</h1>        
+        </div>
         <div class="form-name-el">
-          <label for="player1"> ${player1Name} </label>
+          <label for="player1" class="player-name-label"> ${player1Name} </label>
           <input type="text" name="player1" id="player1" required/>
         </div>
         <div class="form-name-el">
-          <label for="player2"> ${player2Name} </label>
+          <label for="player2" class="player-name-label"> ${player2Name} </label>
           <input type="text" name="player2" id="player2" required/>
         </div>
         <div class="submit-container">
-          <button class="silly-font" type="button">LET'S ROCK!</button>
+          <button class="silly-font" type="button" id="submit-btn">LET'S ROCK!</button>
         </div>
       </form>
     </div>
@@ -100,6 +103,13 @@ function renderShipInventory() {
 
   document.querySelector(".player-names").insertAdjacentHTML("afterend", html);
   addRotateEventListener();
+}
+
+function addRotateEventListener() {
+  const inv = document.querySelector(".ship-inventory");
+  inv.addEventListener("click", () => {
+    Storage().changeRotation();
+  });
 }
 
 export {

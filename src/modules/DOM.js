@@ -4,6 +4,7 @@ import {
   renderPlayer2Name,
   renderWelcomeScreen,
   renderNameSelection,
+  renderShipInventory,
 } from "./UI";
 import Game from "./gameloop";
 import { Storage, Gameboard } from "./battleship";
@@ -141,20 +142,8 @@ function tagCells(table, cellsArr) {
   }
 }
 
-function addRotateEventListener() {
-  const inv = document.querySelector(".ship-inventory");
-  inv.addEventListener("click", () => {
-    Storage().changeRotation();
-  });
-}
-
 function renderGameBoard1(rotate = false) {
   Storage().resetShips();
-  /* const game = Game(
-    localStorage.getItem("player1Name"),
-    localStorage.getItem("player2Name")
-  );
-  */
 
   const main = document.querySelector("main");
   main.innerHTML = `
@@ -175,11 +164,6 @@ function renderGameBoard1(rotate = false) {
 
 function renderGameBoard2(rotate = false) {
   Storage().resetShips();
-  /* const game = Game(
-    localStorage.getItem("player1Name"),
-    localStorage.getItem("player2Name")
-  );
-  */
   Storage().changeTurn();
   const main = document.querySelector("main");
   main.innerHTML = `
@@ -326,23 +310,17 @@ function storageSetPlayerNames(player1Name, player2Name) {
 
 function addNameSubmitBtnEventListeners() {
   document.querySelector("button").addEventListener("click", (e) => {
-    let player1Name = e.target.form[0].value;
-    let player2Name = e.target.form[1].value;
-    if (player1Name === "") {
-      player1Name = "Player 1";
-    }
-    if (player2Name === "") {
-      player2Name = "Player 2";
-    }
-    storageSetPlayerNames(player1Name, player2Name);
+    e.target.form[0].value = "Player 1";
+    e.target.form[1].value = "Player 2";
+    storageSetPlayerNames("Player 1", "Player 2");
     waitForAnimationEnd("fade-out", ".name-selection", removeNameSelectScreen);
     waitForAnimationEnd("fade-out", ".name-selection", renderGameBoard1);
   });
 }
 
 function addOpponentSelectEventListeners() {
-  const aiBtn = document.querySelector("#ai");
-  const humanBtn = document.querySelector("#human");
+  const aiBtn = document.querySelector(".robot-container");
+  const humanBtn = document.querySelector(".human-container");
 
   aiBtn.addEventListener("click", () => {
     localStorage.setItem("opponent", "ai");
@@ -356,8 +334,10 @@ function addOpponentSelectEventListeners() {
   humanBtn.addEventListener("click", () => {
     localStorage.setItem("opponent", "human");
     waitForAnimationEnd("fade-out", ".welcome", removeWelcomeScreen);
-    waitForAnimationEnd("fade-out", ".welcome", renderNameSelection);
-    addNameSubmitBtnEventListeners();
+    waitForAnimationEnd("fade-out", ".welcome", () => {
+      renderNameSelection();
+      addNameSubmitBtnEventListeners();
+    });
   });
 }
 
@@ -379,8 +359,7 @@ addOpponentSelectEventListeners();
 
 Storage().initShipCoords();
 
-/* removeWelcomeScreen();
-renderGameBoards();
-renderGameEnd();
- */
+renderNameSelection();
+addNameSubmitBtnEventListeners();
+
 export { unRenderShips, styleAttacks };
