@@ -206,6 +206,18 @@ button.silly-font:hover {
   background-color: #0284c7;
 }
 
+.ship-start {
+  background-image: url(./assets/front_ship.png);
+}
+
+.ship-end {
+  background-image: url(./assets/back_ship_alt.png);
+}
+
+.ship-mid {
+  background-image: url(./assets/middle_ship.png);
+}
+
 .quadruple {
   background-color: #4338ca;
 }

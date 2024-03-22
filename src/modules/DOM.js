@@ -61,10 +61,12 @@ function hoverHighlightPlacement(e, cellsArr, rotate = false) {
   const curShipLength = Storage().getCurrentShip();
   let cellX;
   let cellY;
+  let shipImageClass = "ship-start";
   while (cellsArr.length) {
     const cell = cellsArr.shift();
     if (!cell.classList.contains("placed")) {
       cell.classList.remove(className);
+      cell.classList.remove(shipImageClass);
     }
   }
   for (let i = 0; i < curShipLength; i += 1) {
@@ -74,6 +76,13 @@ function hoverHighlightPlacement(e, cellsArr, rotate = false) {
     } else {
       cellX = Number(e.target.dataset.x) + i;
       cellY = e.target.dataset.y;
+    }
+    if (i === 0) {
+      const startingCell = document.querySelector(
+        `.cell[data-x="${cellX}"][data-y="${cellY}"]`
+      );
+      shipImageClass = "ship-start";
+      startingCell.classList.add(shipImageClass);
     }
     const adjacentCell = document.querySelector(
       `.cell[data-x="${cellX}"][data-y="${cellY}"]`
