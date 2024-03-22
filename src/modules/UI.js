@@ -1,10 +1,14 @@
+import { Storage } from "./battleship";
+
 function renderPlayer1Name() {
   let turn = "";
   if (localStorage.getItem("turn") === "p1") turn = "turn";
   const html = `
       <div class="player-names">
         <div class="player1-name name silly-font pink-bubble ${turn}">
-          ${localStorage.getItem("player1Name")}
+          <div class="player-name-text">${localStorage.getItem(
+            "player1Name"
+          )}</div>
         </div>
         `;
   return html;
@@ -94,19 +98,25 @@ function renderGameEnd() {
   addGameOverEventListeners();
 }
 
-function renderShipInventory() {
+function renderRotateBtn() {
   const html = `
-    <div class="ship-inventory">
-      <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 -960 960 960" width="50"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
+  <div class="rotate-btn-container">
+    <div class="rotate-btn-content"> 
+      <div class="rotate-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" height="40" viewBox="0 -960 960 960" width="40"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
+      </div>
     </div>
+  </div>
   `;
 
-  document.querySelector(".player-names").insertAdjacentHTML("afterend", html);
+  document
+    .querySelector(".player1-board-container")
+    .insertAdjacentHTML("afterend", html);
   addRotateEventListener();
 }
 
 function addRotateEventListener() {
-  const inv = document.querySelector(".ship-inventory");
+  const inv = document.querySelector(".rotate-btn");
   inv.addEventListener("click", () => {
     Storage().changeRotation();
   });
@@ -117,6 +127,6 @@ export {
   renderPlayer2Name,
   renderWelcomeScreen,
   renderNameSelection,
-  renderShipInventory,
+  renderRotateBtn,
   renderGameEnd,
 };

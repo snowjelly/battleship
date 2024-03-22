@@ -4,7 +4,7 @@ import {
   renderPlayer2Name,
   renderWelcomeScreen,
   renderNameSelection,
-  renderShipInventory,
+  renderRotateBtn,
 } from "./UI";
 import Game from "./gameloop";
 import { Storage, Gameboard } from "./battleship";
@@ -152,10 +152,9 @@ function renderGameBoard1(rotate = false) {
 
   container.insertAdjacentHTML("beforeend", renderPlayer1Name());
   container.insertAdjacentHTML("beforeend", renderBoard1());
-  renderShipInventory();
+  renderRotateBtn();
 
-  const p1Table = document.querySelector(".player1-board-container")
-    .children[0];
+  const p1Table = document.querySelector(".player1-board-content").children[0];
 
   const cells = [];
 
@@ -172,10 +171,9 @@ function renderGameBoard2(rotate = false) {
 
   container.insertAdjacentHTML("beforeend", renderPlayer2Name());
   container.insertAdjacentHTML("beforeend", renderBoard2());
-  renderShipInventory();
+  renderRotateBtn();
 
-  const p2Table = document.querySelector(".player2-board-container")
-    .children[0];
+  const p2Table = document.querySelector(".player2-board-content").children[0];
 
   const cells = [];
 
