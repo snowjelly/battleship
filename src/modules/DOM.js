@@ -55,18 +55,26 @@ function getClassNameOfTheCurrentShip() {
   return null;
 }
 
+function styleShipPlacement(cellsArr) {
+  for (let i = 0; i < cellsArr.length; i += 1) {
+    if (cellsArr[i] === null) return;
+    if (i === 0) {
+      cellsArr[i].classList.add("ship-4");
+      return;
+    }
+  }
+}
+
 function hoverHighlightPlacement(e, cellsArr, rotate = false) {
   if (cellsArr === null) return;
-  const className = getClassNameOfTheCurrentShip();
   const curShipLength = Storage().getCurrentShip();
   let cellX;
   let cellY;
-  let shipImageClass = "ship-start";
+
   while (cellsArr.length) {
     const cell = cellsArr.shift();
-    if (!cell.classList.contains("placed")) {
-      cell.classList.remove(className);
-      cell.classList.remove(shipImageClass);
+    if (cell !== null && !cell.classList.contains("placed")) {
+      cell.classList = "cell";
     }
   }
   for (let i = 0; i < curShipLength; i += 1) {
@@ -77,20 +85,12 @@ function hoverHighlightPlacement(e, cellsArr, rotate = false) {
       cellX = Number(e.target.dataset.x) + i;
       cellY = e.target.dataset.y;
     }
-    if (i === 0) {
-      const startingCell = document.querySelector(
-        `.cell[data-x="${cellX}"][data-y="${cellY}"]`
-      );
-      shipImageClass = "ship-start";
-      startingCell.classList.add(shipImageClass);
-    }
     const adjacentCell = document.querySelector(
       `.cell[data-x="${cellX}"][data-y="${cellY}"]`
     );
-    if (adjacentCell === null) return;
     cellsArr.push(adjacentCell);
-    adjacentCell.classList.add(className);
   }
+  styleShipPlacement(cellsArr, rotate);
 }
 
 function getShipPlacementCoords(shipGhost) {

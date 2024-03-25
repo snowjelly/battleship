@@ -182,8 +182,8 @@ button.silly-font:hover {
 }
 
 .cell {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 32px;
+  height: 32px;
   border: 1px #7e22ce solid;
 }
 
@@ -206,16 +206,9 @@ button.silly-font:hover {
   background-color: #0284c7;
 }
 
-.ship-start {
-  background-image: url(./assets/front_ship.png);
-}
-
-.ship-end {
-  background-image: url(./assets/back_ship_alt.png);
-}
-
-.ship-mid {
-  background-image: url(./assets/middle_ship.png);
+.ship-4 {
+  width: 128px;
+  background-image: url(./assets/4ship.png);
 }
 
 .quadruple {
